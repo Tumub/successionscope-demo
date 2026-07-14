@@ -3,337 +3,392 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SuccessionScope — Logistics &amp; Freight</title>
+<title>SuccessionScope — 50 scored off-market succession targets</title>
+<meta name="description" content="SuccessionScope scores every active UK SME on statistical similarity to pre-succession profiles, from Companies House public data, and delivers the top 50 in your industry thesis as a client-ready report.">
 <style>
-/* Broadsheet design-system tokens (claude.ai/design project, styles.css) */
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap');
 :root {
-  --color-bg: #f3f2f2;
-  --color-surface: #eae9e9;
-  --color-text: #201e1d;
-  --color-accent: #0088b0;
-  --color-accent-2: #d6006c;
-  --color-divider: color-mix(in srgb, #201e1d 16%, transparent);
-  --color-accent-100: #e9f8ff;
-  --color-accent-600: #1186ac;
-  --color-accent-700: #006786;
-  --color-accent-800: #004961;
-  --color-accent-2-700: #aa0b56;
-  --color-process-yellow: #edbb00;
-  --font-heading: "Source Serif 4", system-ui, sans-serif;
-  --font-heading-weight: 600;
-  --font-body: "Source Serif 4", system-ui, sans-serif;
-  --space-1: 5px; --space-2: 10px; --space-3: 15px; --space-4: 20px;
-  --radius-sm: 1px; --radius-md: 2px;
+  --bg: #f3f2f2;
+  --surface: #eae9e9;
+  --ink: #201e1d;
+  --accent: #0088b0;
+  --accent-600: #1186ac;
+  --accent-700: #006786;
+  --accent-800: #004961;
+  --accent-100: #e9f8ff;
+  --hot: #aa0b56;
+  --divider: color-mix(in srgb, #201e1d 16%, transparent);
+  --hairline: color-mix(in srgb, #201e1d 9%, transparent);
+  --muted-55: color-mix(in srgb, #201e1d 55%, transparent);
+  --muted-65: color-mix(in srgb, #201e1d 65%, transparent);
+  --muted-75: color-mix(in srgb, #201e1d 75%, transparent);
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
 }
 *, *::before, *::after { box-sizing: border-box; }
-body { margin:0; background:var(--color-bg); color:var(--color-text);
-  font-family:var(--font-body); font-size:15px; line-height:1.55; text-wrap:pretty; }
-h1,h2,h3 { font-family:var(--font-heading); font-weight:var(--font-heading-weight);
-  line-height:1.12; letter-spacing:-0.015em; margin:0 0 var(--space-2); }
-p { margin:0 0 var(--space-3); }
-a { color:var(--color-accent-700); text-underline-offset:3px; }
-a:hover { color:var(--color-accent); }
-:focus { outline:none; }
-:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; }
-::selection { background:color-mix(in srgb, var(--color-accent) 30%, transparent); }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--serif); font-size: 16px; line-height: 1.6;
+}
+a { color: var(--accent-700); text-underline-offset: 3px; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+h1, h2, h3 { font-weight: 600; line-height: 1.12; letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 48px); }
+.kicker {
+  font-size: 11.5px; letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--muted-55); font-weight: 400;
+}
+.num { font-feature-settings: 'tnum' 1; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  text-decoration: none; font-family: var(--serif); font-weight: 600;
+  font-size: 15.5px; line-height: 1.2; border-radius: 2px;
+  padding: 13px 22px; border: 1px solid transparent;
+}
+.btn-primary { background: var(--accent); color: var(--bg); }
+.btn-primary:hover { background: var(--accent-600); color: var(--bg); }
+.btn-secondary { border-color: var(--divider); color: var(--ink); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); color: var(--ink); }
 
-.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px;
-  cursor:pointer; text-decoration:none; font-family:var(--font-heading);
-  font-weight:var(--font-heading-weight); font-size:14px; line-height:1.2;
-  color:var(--color-text); background:transparent; border:1px solid transparent;
-  padding:var(--space-2) calc(var(--space-3) * 1.2); border-radius:var(--radius-md); }
-.btn-primary { background:var(--color-accent); color:var(--color-bg); }
-.btn-primary:hover { background:var(--color-accent-600); }
-.btn-primary:active { background:var(--color-accent-700); }
-.btn-ghost { color:var(--color-accent); padding-inline:var(--space-1); }
-.btn-ghost:hover { background:color-mix(in srgb, var(--color-accent) 10%, transparent); }
+/* masthead */
+header.masthead { padding: 26px 0 14px; }
+.masthead-row { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; }
+.brand { font-size: 21px; font-weight: 600; letter-spacing: -0.01em; text-decoration: none; color: var(--ink); }
+.brand:hover { color: var(--ink); }
+nav.top { margin-left: auto; display: flex; gap: 22px; flex-wrap: wrap; }
+nav.top a { font-size: 14.5px; text-decoration: none; }
+nav.top a:hover { text-decoration: underline; }
+.rule { height: 5px; border: 0; margin: 12px 0 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink); }
 
-.input { width:100%; min-height:36px; padding:6px 10px; font:inherit; font-size:14px;
-  color:var(--color-text); caret-color:var(--color-accent); background:var(--color-surface);
-  border:1px solid var(--color-divider); border-radius:var(--radius-md); }
-.input::placeholder { color:color-mix(in srgb, var(--color-text) 65%, transparent); opacity:1; }
-.input:hover { border-color:color-mix(in srgb, var(--color-text) 45%, transparent); }
-.input:focus-visible { border-color:var(--color-accent); outline-offset:0; }
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(320px, 7fr) minmax(300px, 5fr); gap: 40px clamp(36px, 5vw, 80px); align-items: start; padding: clamp(44px, 7vw, 84px) 0 clamp(36px, 5vw, 64px); }
+.hero h1 { font-size: clamp(34px, 4.6vw, 52px); }
+.hero .lede { font-size: clamp(16.5px, 1.6vw, 19px); line-height: 1.65; color: var(--muted-75); margin: 22px 0 30px; max-width: 34em; }
+.cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.cta-note { font-size: 13px; color: var(--muted-55); margin-top: 14px; }
 
-.nav { display:flex; align-items:center; gap:var(--space-4);
-  padding:var(--space-3) var(--space-4); flex-wrap:wrap; }
-.nav-brand { font-family:var(--font-heading); font-weight:var(--font-heading-weight);
-  font-size:18px; margin-right:auto; }
-.nav a { color:inherit; text-decoration:none; font-size:14px; }
-.nav a:hover { color:var(--color-accent); }
+/* teaser card */
+.teaser { border-top: 2px solid var(--ink); padding-top: 14px; }
+.teaser .kicker { display: block; margin-bottom: 14px; }
+.trow { padding: 12px 0; border-bottom: 1px solid var(--hairline); }
+.trow-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.trow-name { font-weight: 600; font-size: 15px; }
+.trow-score { font-weight: 600; font-size: 16px; color: var(--accent-700); }
+.tbar { height: 7px; background: color-mix(in srgb, var(--ink) 8%, transparent); border-radius: 1px; overflow: hidden; margin: 8px 0 6px; }
+.tbar > span { display: block; height: 100%; background: var(--accent); }
+.trow-meta { font-size: 12.5px; color: var(--muted-55); }
+.teaser-note { font-size: 12.5px; font-style: italic; color: var(--muted-55); margin-top: 12px; line-height: 1.55; }
+.teaser-note a { color: var(--accent-700); }
 
-/* Plate headline — three-plate CMYK construction from the broadsheet system.
-   Static register (--press-nx/--press-ny default to 0 without the press driver). */
-.cmyk-head { position:relative; }
-.cmyk-head .paper { color:var(--color-bg);
-  text-shadow:0.027em 0.0185em 0 var(--color-bg), -0.0245em -0.0175em 0 var(--color-bg); }
-.cmyk-head .plate { position:absolute; inset:0; mix-blend-mode:multiply;
-  pointer-events:none; user-select:none; text-box:trim-both cap alphabetic; }
-.cmyk-head .plate-c { color:var(--color-accent); }
-.cmyk-head .plate-m { color:var(--color-accent-2);
-  translate:calc(0.018em + 0.009em*var(--press-nx, 0)) calc(0.0125em + 0.006em*var(--press-ny, 0)); }
-.cmyk-head .plate-y { color:var(--color-process-yellow);
-  translate:calc(-0.0155em + 0.009em*var(--press-nx, 0)) calc(-0.0115em + 0.006em*var(--press-ny, 0)); }
+/* numbers strip */
+.strip { border-top: 1px solid var(--divider); border-bottom: 1px solid var(--divider); padding: 22px 0; }
+.strip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.stat b { display: block; font-size: clamp(22px, 2.6vw, 30px); font-weight: 600; }
+.stat span { font-size: 13px; color: var(--muted-55); line-height: 1.4; display: block; margin-top: 2px; }
 
-.kicker { display:block; font-size:13px; letter-spacing:0.08em; text-transform:uppercase;
-  color:color-mix(in srgb, var(--color-text) 70%, transparent); margin-bottom:10px; }
-.colhead { font-family:var(--font-body); font-size:11px; letter-spacing:0.08em;
-  text-transform:uppercase; color:color-mix(in srgb, var(--color-text) 60%, transparent);
-  background:none; border:0; padding:0; text-align:left; }
-button.colhead { cursor:pointer; }
-button.colhead:hover { color:var(--color-accent-700); }
-.rowgrid { display:grid;
-  grid-template-columns:52px minmax(210px,1.5fr) 96px 66px 58px minmax(110px,0.9fr) 150px 52px;
-  gap:0 14px; align-items:center; }
-.trow { padding:12px 10px;
-  border-bottom:1px solid color-mix(in srgb, var(--color-text) 8%, transparent); cursor:pointer; }
-.trow:hover { background:color-mix(in srgb, var(--color-text) 4%, transparent); }
-.mono { font-feature-settings:'tnum' 1; }
-.dim { color:color-mix(in srgb, var(--color-text) 70%, transparent); font-size:13.5px; }
-.headnum { font-family:var(--font-heading); font-weight:var(--font-heading-weight); }
-.bar { display:block; height:9px; border-radius:var(--radius-sm); overflow:hidden;
-  background:color-mix(in srgb, var(--color-text) 8%, transparent); }
-.bar > span { display:block; height:100%; background:var(--color-accent); }
-.minopt { font-family:var(--font-body); font-size:13px; padding:7px 14px; border:0;
-  cursor:pointer; background:transparent; color:var(--color-text); }
-.minopt:hover { opacity:0.85; }
-.minopt[aria-pressed="true"] { background:var(--color-accent); color:var(--color-bg); }
-.sigbar { height:6px; border-radius:var(--radius-sm); overflow:hidden;
-  background:color-mix(in srgb, var(--color-text) 8%, transparent); }
-.sigbar > div { height:100%; background:var(--color-accent); }
+/* sections */
+section.block { padding: clamp(48px, 6vw, 76px) 0 0; }
+.block-head { max-width: 60ch; margin-bottom: 34px; }
+.block-head h2 { font-size: clamp(24px, 3vw, 32px); margin: 6px 0 12px; }
+.block-head p { color: var(--muted-65); font-size: 16px; }
+
+/* signals */
+.signals { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px 44px; }
+.sig { padding: 14px 0; border-top: 1px solid var(--hairline); }
+.sig-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.sig-name { font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-75); }
+.sig-pts { font-weight: 600; font-size: 14.5px; }
+.sig-bar { height: 8px; background: color-mix(in srgb, var(--ink) 7%, transparent); border-radius: 1px; overflow: hidden; margin-bottom: 8px; }
+.sig-bar > span { display: block; height: 100%; background: var(--accent); }
+.sig p { font-size: 13.5px; line-height: 1.6; color: var(--muted-65); }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px clamp(28px, 4vw, 56px); }
+.step { border-top: 2px solid var(--ink); padding-top: 14px; }
+.step .kicker { color: var(--accent-700); }
+.step h3 { font-size: 19px; margin: 8px 0 10px; }
+.step p { font-size: 14.5px; line-height: 1.65; color: var(--muted-65); }
+
+/* honesty */
+.honesty { background: var(--surface); border-radius: 2px; padding: clamp(26px, 4vw, 40px); display: grid; grid-template-columns: minmax(280px, 3fr) minmax(280px, 2fr); gap: 28px clamp(28px, 4vw, 64px); }
+.honesty blockquote { margin: 0; font-size: clamp(18px, 2vw, 21px); font-style: italic; line-height: 1.55; }
+.honesty ul { margin: 0; padding: 0; list-style: none; }
+.honesty li { font-size: 14px; line-height: 1.6; color: var(--muted-75); padding: 9px 0; border-bottom: 1px solid var(--hairline); }
+.honesty li:last-child { border-bottom: 0; }
+
+/* pricing */
+.price-card { border: 1px solid var(--divider); border-top: 4px solid var(--accent); border-radius: 2px; padding: clamp(26px, 4vw, 40px); display: grid; grid-template-columns: minmax(280px, 3fr) minmax(240px, 2fr); gap: 28px clamp(28px, 4vw, 64px); align-items: start; }
+.price-tag { font-size: clamp(36px, 4.5vw, 48px); font-weight: 600; line-height: 1; }
+.price-tag small { font-size: 15px; font-weight: 400; color: var(--muted-55); }
+.price-card ul { margin: 18px 0 0; padding: 0; list-style: none; }
+.price-card li { font-size: 14.5px; line-height: 1.55; padding: 8px 0; border-bottom: 1px solid var(--hairline); }
+.price-card li b { font-weight: 600; }
+.price-cta { text-align: left; }
+.price-cta .btn { width: 100%; justify-content: center; }
+.price-cta p { font-size: 13px; color: var(--muted-55); margin-top: 12px; line-height: 1.6; }
+
+/* faq */
+.faq { max-width: 68ch; }
+.faq details { border-top: 1px solid var(--hairline); padding: 4px 0; }
+.faq details:last-child { border-bottom: 1px solid var(--hairline); }
+.faq summary { cursor: pointer; font-weight: 600; font-size: 15.5px; padding: 12px 0; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::after { content: "+"; color: var(--accent-700); font-weight: 400; }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { font-size: 14.5px; line-height: 1.7; color: var(--muted-75); padding: 0 0 16px; max-width: 60ch; }
+
+/* footer */
+footer.foot { margin-top: clamp(56px, 7vw, 88px); border-top: 2px solid var(--ink); padding: 26px 0 48px; }
+.foot-grid { display: flex; gap: 24px clamp(28px, 5vw, 72px); flex-wrap: wrap; justify-content: space-between; }
+.foot p { font-size: 12.5px; line-height: 1.7; color: var(--muted-55); max-width: 62ch; }
+.foot a { color: var(--accent-700); }
+.foot .brand { font-size: 16px; }
+
+@media (max-width: 840px) {
+  .hero, .honesty, .price-card { grid-template-columns: 1fr; }
+  .strip-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
-<nav class="nav" style="padding-inline:max(clamp(20px,5vw,72px),calc((100% - 1180px)/2 + clamp(20px,5vw,72px)))">
-  <span class="nav-brand">SuccessionScope</span>
-  <a href="#targets">Targets</a>
-  <a href="#methodology">Methodology</a>
-  <a href="#commission">Commission</a>
-  <a class="btn btn-primary" href="#commission" style="text-decoration:none">Commission a report</a>
-</nav>
-<div style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,72px)">
 
-  <section style="padding:112px 0 84px">
-    <h1 style="font-size:clamp(42px,6vw,78px);line-height:1.08;letter-spacing:-0.02em;margin:0 0 0 -0.035em">
-      <span class="line cmyk-head" style="display:block"><span class="paper">The owners are retiring.</span><span class="plate plate-c" aria-hidden="true">The owners are retiring.</span><span class="plate plate-m" aria-hidden="true">The owners are retiring.</span><span class="plate plate-y" aria-hidden="true">The owners are retiring.</span></span><span class="line cmyk-head" style="display:block"><span class="paper">The listings don’t exist.</span><span class="plate plate-c" aria-hidden="true">The listings don’t exist.</span><span class="plate plate-m" aria-hidden="true">The listings don’t exist.</span><span class="plate plate-y" aria-hidden="true">The listings don’t exist.</span></span>
-    </h1>
-    <p style="font-size:17px;line-height:28px;max-width:58ch;margin:34px 0 0">SuccessionScope reads the whole UK register — every filing, every director, every year of silence — and scores each private company on how closely it resembles a business about to change hands. This edition: fifty off-market targets for Logistics &amp; Freight, ranked, with the working shown.</p>
-    <p style="margin:18px 0 0;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-2-700)">Sample edition — synthetic companies, not real registrants</p>
-    <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:28px">
-      <a class="btn btn-primary" href="#targets" style="text-decoration:none">Read the fifty</a>
-      <a class="btn btn-ghost" href="#methodology" style="text-decoration:none">How the score works</a>
+<header class="masthead">
+  <div class="wrap">
+    <div class="masthead-row">
+      <a class="brand" href="./">SuccessionScope</a>
+      <nav class="top" aria-label="Site">
+        <a href="report.html">Sample report</a>
+        <a href="app.html">App demo</a>
+        <a href="#method">Method</a>
+        <a href="#pilot">Pilot</a>
+        <a href="mailto:umut.bakin@torquefoundry.com">Contact</a>
+      </nav>
     </div>
-  </section>
+    <hr class="rule">
+  </div>
+</header>
 
-  <section aria-label="Report particulars" style="padding:0 0 70px">
-    <hr style="height:5px;border:0;margin:0;border-top:2px solid var(--color-text);border-bottom:1px solid var(--color-text)">
-    <p style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px 28px;margin:0;padding:14px 0;font-size:13px;line-height:14px;letter-spacing:0.08em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 70%,transparent)">
-      <span>Report № 000 — Sample</span>
-      <span>SIC 49xxx–53xxx</span>
-      <span>Score engine v0.1.0</span>
-      <span>Pressed July 2026</span>
-    </p>
-    <hr style="height:0;border:0;border-top:1px solid var(--color-text);margin:0">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px 70px;padding:14px 0 28px">
-      <p style="display:flex;align-items:baseline;gap:8px;margin:0;font-size:15.5px;line-height:28px"><span>Synthetic companies generated</span><span style="flex:1;min-width:28px;align-self:flex-end;margin-bottom:0.34em;border-bottom:1px dotted color-mix(in srgb,var(--color-text) 45%,transparent)"></span><span style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:17px">60</span></p>
-<p style="display:flex;align-items:baseline;gap:8px;margin:0;font-size:15.5px;line-height:28px"><span>Scored by the engine</span><span style="flex:1;min-width:28px;align-self:flex-end;margin-bottom:0.34em;border-bottom:1px dotted color-mix(in srgb,var(--color-text) 45%,transparent)"></span><span style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:17px">60</span></p>
-<p style="display:flex;align-items:baseline;gap:8px;margin:0;font-size:15.5px;line-height:28px"><span>Ranked into this sample edition</span><span style="flex:1;min-width:28px;align-self:flex-end;margin-bottom:0.34em;border-bottom:1px dotted color-mix(in srgb,var(--color-text) 45%,transparent)"></span><span style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:17px;color:var(--color-accent-700)">50</span></p>
-    </div>
-    <hr style="height:0;border:0;border-top:1px solid var(--color-text);margin:0">
-  </section>
-
-  <section id="targets" style="padding:28px 0 70px">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:24px">
+<main>
+  <div class="wrap">
+    <section class="hero">
       <div>
-        <span class="kicker">The register, ranked</span>
-        <h2 style="font-size:32px;line-height:1.2;margin:0">Fifty scored succession targets</h2>
-        <p class="dim" style="font-size:15.5px;line-height:28px;margin:8px 0 0">Click any company for its full signal breakdown. <span id="shownLine"></span></p>
+        <span class="kicker">Off-market deal origination · United Kingdom</span>
+        <h1>The owners most likely to sell haven&rsquo;t listed anything yet.</h1>
+        <p class="lede">SuccessionScope reads the entire UK Companies House register, scores every
+          active private SME on statistical similarity to pre-succession profiles &mdash; director age
+          bands, sole and family control, absent heirs, filing behaviour &mdash; and hands you the top 50
+          in your industry thesis as a client-ready report.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="mailto:umut.bakin@torquefoundry.com?subject=SuccessionScope%20pilot%20report%20%E2%80%94%20logistics&body=Hi%20Umut%2C%0A%0AI%27d%20like%20to%20commission%20a%20SuccessionScope%20pilot%20report.%0A%0AThesis%20%2F%20sector%3A%20%0ARegions%20(optional)%3A%20%0AExclusions%20(optional)%3A%20">Commission the pilot &mdash; &euro;500</a>
+          <a class="btn btn-secondary" href="report.html">Read a sample report</a>
+        </div>
+        <p class="cta-note">First thesis shipping now: UK logistics &amp; freight (SIC 49&ndash;53). Manufacturing next. Custom SIC sets on request.</p>
       </div>
-      <div id="minOpts" style="display:inline-flex;border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden">
-        <button class="minopt" data-min="0" aria-pressed="true">All scores</button>
-        <button class="minopt" data-min="60" aria-pressed="false">60+</button>
-        <button class="minopt" data-min="80" aria-pressed="false">80+</button>
+
+      <aside class="teaser" aria-label="Sample scored targets">
+        <span class="kicker">From the sample &mdash; synthetic data</span>
+        <div class="trow">
+          <div class="trow-head"><span class="trow-name">Hartwell Haulage Ltd</span><span class="trow-score num">95<span style="color:var(--muted-55);font-weight:400;font-size:12px">/100</span></span></div>
+          <div class="tbar"><span style="width:95%"></span></div>
+          <div class="trow-meta num">Sole director, band 65&ndash;70 &middot; inc. 1990 &middot; no successor on the board</div>
+        </div>
+        <div class="trow">
+          <div class="trow-head"><span class="trow-name">Patel Logistics Group Ltd</span><span class="trow-score num">90<span style="color:var(--muted-55);font-weight:400;font-size:12px">/100</span></span></div>
+          <div class="tbar"><span style="width:90%"></span></div>
+          <div class="trow-meta num">Family board &middot; inc. 1995 &middot; auditor changed inside 18 months</div>
+        </div>
+        <div class="trow" style="border-bottom:0">
+          <div class="trow-head"><span class="trow-name">Bramford Transport Ltd</span><span class="trow-score num">55<span style="color:var(--muted-55);font-weight:400;font-size:12px">/100</span></span></div>
+          <div class="tbar"><span style="width:55%"></span></div>
+          <div class="trow-meta num">Founder resigned 2020 &middot; successor generation in place</div>
+        </div>
+        <p class="teaser-note">Names above are synthetic. The commissioned report carries real companies,
+          CRNs and registered localities &mdash; see the <a href="report.html">full sample</a> for the format.</p>
+      </aside>
+    </section>
+  </div>
+
+  <div class="strip">
+    <div class="wrap">
+      <div class="strip-grid num">
+        <div class="stat"><b>5.7M</b><span>companies read from the official register, every month</span></div>
+        <div class="stat"><b>13,670</b><span>active UK logistics SMEs pass the thesis filters</span></div>
+        <div class="stat"><b>50</b><span>ranked targets in your report, each with a full signal breakdown</span></div>
+        <div class="stat"><b>0</b><span>scraped or private data sources &mdash; public registers only</span></div>
       </div>
     </div>
+  </div>
 
-    <div style="overflow-x:auto">
-    <div role="table" aria-label="Scored succession targets" style="min-width:880px">
-      <div class="rowgrid" style="padding:10px 10px;border-bottom:1px solid var(--color-divider)">
-        <span class="colhead">№</span>
-        <button class="colhead" data-sort="name">Company <span id="arrName"></span></button>
-        <span class="colhead">CRN</span>
-        <span class="colhead">SIC</span>
-        <button class="colhead" data-sort="inc">Inc. <span id="arrInc"></span></button>
-        <span class="colhead">Locality</span>
-        <button class="colhead" data-sort="score">Score <span id="arrScore"></span></button>
-        <span></span>
+  <div class="wrap">
+    <section class="block" id="method">
+      <div class="block-head">
+        <span class="kicker">The score</span>
+        <h2>Six public signals. One hundred points. Every point explained.</h2>
+        <p>The breakdown is the product: each target shows exactly why it scored what it scored,
+          so the report survives contact with an investment committee.</p>
       </div>
-      <div id="rows"></div>
-    </div>
-    </div>
-    <p class="dim" style="font-size:13.5px;line-height:28px;margin:14px 0 0;color:color-mix(in srgb,var(--color-text) 60%,transparent)">Director ages appear as five-year bands only, as provided by the public register. The full edition ships with a CSV appendix of every field above.</p>
-  </section>
+      <div class="signals">
+        <div class="sig">
+          <div class="sig-head"><span class="sig-name">Director age band</span><span class="sig-pts num">40 pts</span></div>
+          <div class="sig-bar"><span style="width:100%"></span></div>
+          <p>Points ramp as the oldest active director passes typical retirement-planning age.
+            Ages come from the register&rsquo;s month/year of birth and appear only as five-year bands.</p>
+        </div>
+        <div class="sig">
+          <div class="sig-head"><span class="sig-name">Sole / family control</span><span class="sig-pts num">20 pts</span></div>
+          <div class="sig-bar"><span style="width:50%"></span></div>
+          <p>A single active director, or a board sharing one surname &mdash; the situations where
+            succession has no institutional answer.</p>
+        </div>
+        <div class="sig">
+          <div class="sig-head"><span class="sig-name">No heir signal</span><span class="sig-pts num">15 pts</span></div>
+          <div class="sig-bar"><span style="width:37.5%"></span></div>
+          <p>No director under 45 appointed in the last five years: no visible next generation
+            on the board.</p>
+        </div>
+        <div class="sig">
+          <div class="sig-head"><span class="sig-name">Company age</span><span class="sig-pts num">10 pts</span></div>
+          <div class="sig-bar"><span style="width:25%"></span></div>
+          <p>Firms trading 25+ years are far more likely to be founder-generation owned.</p>
+        </div>
+        <div class="sig">
+          <div class="sig-head"><span class="sig-name">Stability</span><span class="sig-pts num">10 pts</span></div>
+          <div class="sig-bar"><span style="width:25%"></span></div>
+          <p>Clean active status, filing on time, no strike-off or insolvency markers &mdash;
+            a target has to be a going concern to be worth a letter.</p>
+        </div>
+        <div class="sig">
+          <div class="sig-head"><span class="sig-name">Recent events</span><span class="sig-pts num">5 pts</span></div>
+          <div class="sig-bar"><span style="width:12.5%"></span></div>
+          <p>Auditor or registered-address changes in the last 18 months can accompany advisory
+            activity. The weakest signal, weighted accordingly.</p>
+        </div>
+      </div>
+    </section>
 
-  <section id="methodology" style="padding:56px 0 42px">
-    <span class="kicker">Methodology</span>
-    <h2 style="font-size:32px;line-height:1.2;margin:0 0 8px">Six signals. One hundred points. No black box.</h2>
-    <p style="font-size:15.5px;line-height:28px;max-width:58ch;color:color-mix(in srgb,var(--color-text) 78%,transparent);margin:0 0 34px">Every point in every score traces to a public filing at Companies House. The breakdown is the product — you can check our working, and you should.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:42px clamp(28px,4vw,64px)">
-      <div><h3 style="font-size:20px;line-height:28px;margin:0">Director age band <span style="color:var(--color-accent-700);font-size:15px">· 40 pts</span></h3><p style="font-size:15.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 78%,transparent);margin:10px 0 0;text-align:justify;hyphens:auto">The strongest predictor of an exit is the calendar. Points scale linearly from the 55–60 band and peak where the eldest active director sits at 65 or beyond — month-and-year of birth as the register provides it, never a full date.</p></div>
-<div><h3 style="font-size:20px;line-height:28px;margin:0">Sole or family control <span style="color:var(--color-accent-700);font-size:15px">· 20 pts</span></h3><p style="font-size:15.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 78%,transparent);margin:10px 0 0;text-align:justify;hyphens:auto">A single active director, or a board sharing one surname, means the decision to sell belongs to one household. Concentrated ownership shortens every conversation that follows.</p></div>
-<div><h3 style="font-size:20px;line-height:28px;margin:0">No heir signal <span style="color:var(--color-accent-700);font-size:15px">· 15 pts</span></h3><p style="font-size:15.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 78%,transparent);margin:10px 0 0;text-align:justify;hyphens:auto">If no director under 45 has been appointed in five years, nobody is being groomed for the chair. The absence of a filing is itself a filing.</p></div>
-<div><h3 style="font-size:20px;line-height:28px;margin:0">Company age <span style="color:var(--color-accent-700);font-size:15px">· 10 pts</span></h3><p style="font-size:15.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 78%,transparent);margin:10px 0 0;text-align:justify;hyphens:auto">Points accrue from fifteen years of trading and peak at twenty-five. A business that has survived three recessions is a business someone will want to buy.</p></div>
-<div><h3 style="font-size:20px;line-height:28px;margin:0">Stability <span style="color:var(--color-accent-700);font-size:15px">· 10 pts</span></h3><p style="font-size:15.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 78%,transparent);margin:10px 0 0;text-align:justify;hyphens:auto">Still filing, on time, with no strike-off or insolvency events. We are pointing you at going concerns, not distressed paper.</p></div>
-<div><h3 style="font-size:20px;line-height:28px;margin:0">Recency events <span style="color:var(--color-accent-700);font-size:15px">· 5 pts</span></h3><p style="font-size:15.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 78%,transparent);margin:10px 0 0;text-align:justify;hyphens:auto">An auditor or registered-address change in the last eighteen months often means advisers have arrived. A small signal, weighted accordingly.</p></div>
-    </div>
-    <figure style="margin:56px 0 0;padding:0">
-      <blockquote style="font-family:var(--font-heading);font-style:italic;font-weight:400;font-size:clamp(22px,2.4vw,30px);line-height:1.45;letter-spacing:-0.01em;max-width:38ch;margin:0;text-indent:-0.475em">“A score indicates statistical similarity to typical pre-succession profiles. It is not a claim that any company or person intends to sell.”</blockquote>
-      <figcaption style="font-size:15.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 70%,transparent);margin:20px 0 0;text-indent:-1.045em">— Printed on the methodology page of every edition</figcaption>
-    </figure>
-  </section>
+    <section class="block">
+      <div class="block-head">
+        <span class="kicker">How it works</span>
+        <h2>Thesis in. Fifty targets out. Five working days.</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="kicker num">Step 1</span>
+          <h3>You define the thesis</h3>
+          <p>Sector by SIC codes, optional regions, exclusions. Logistics &amp; freight is live;
+            any UK SIC set can be configured. One email is enough &mdash; we&rsquo;ll shape it with you.</p>
+        </div>
+        <div class="step">
+          <span class="kicker num">Step 2</span>
+          <h3>We score the register</h3>
+          <p>Every active private company in your thesis is filtered from 5.7M register rows,
+            enriched with officer data from the Companies House API, and scored 0&ndash;100.</p>
+        </div>
+        <div class="step">
+          <span class="kicker num">Step 3</span>
+          <h3>You get the report</h3>
+          <p>A branded PDF: the top 50 by score with per-signal breakdowns, registered localities,
+            a plain-English methodology page &mdash; plus a CSV appendix for your CRM.</p>
+        </div>
+      </div>
+    </section>
 
-  <section id="commission" style="padding:56px 0 42px">
-    <h2 style="font-size:32px;line-height:1.2;margin:0">Your thesis, pressed to fifty names</h2>
-    <p style="font-size:15.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 78%,transparent);max-width:58ch;margin:12px 0 0">Tell us the industry and the region. Within five working days you receive this report for your thesis — fifty scored, off-market UK targets as a branded PDF with the CSV appendix. €500, once. No subscription, no platform, no seat licence.</p>
-    <div style="display:flex;gap:var(--space-3);align-items:stretch;max-width:520px;margin-top:28px">
-      <input class="input" id="commissionEmail" type="email" placeholder="you@searchfund.example" aria-label="Email address" style="flex:1;min-height:36px">
-      <button type="button" class="btn btn-primary" id="commissionBtn" style="min-height:36px;white-space:nowrap">Commission — €500</button>
-    </div>
-    <p style="font-size:13.5px;line-height:28px;color:color-mix(in srgb,var(--color-text) 60%,transparent);max-width:64ch;margin:20px 0 0">This report is compiled exclusively from official public-register data (Companies House, UK). Processing relies on legitimate interest in prioritising business-development research. Scores are prioritisation aids, not predictions. Director ages appear only as bands, never as exact ages or dates of birth. Directors and companies may request removal from future editions at removals@successionscope.example.</p>
-  </section>
+    <section class="block">
+      <div class="honesty">
+        <blockquote>&ldquo;A score indicates statistical similarity to typical pre-succession profiles.
+          It is not a claim that any company or person intends to sell.&rdquo;
+          <span style="display:block;font-style:normal;font-size:13px;color:var(--muted-55);margin-top:10px">&mdash; printed on the methodology page of every report</span>
+        </blockquote>
+        <ul>
+          <li>Built exclusively on official public registers (Companies House). No scraping, no bought lists, no email-finding.</li>
+          <li>Director ages are processed as month/year only and shown only as five-year bands &mdash; never an exact age or date of birth.</li>
+          <li>Every report carries its lawful-basis note and a removal-request contact, honoured within five working days.</li>
+        </ul>
+      </div>
+    </section>
 
-  <footer style="padding:56px 0">
-    <hr style="height:5px;border:0;margin:0 0 14px;border-top:2px solid var(--color-text);border-bottom:1px solid var(--color-text)">
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px 28px;align-items:baseline">
-      <span style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:18px">SuccessionScope</span>
-      <span style="display:flex;gap:24px;flex-wrap:wrap">
-        <a href="#targets" style="font-size:14px;text-decoration:none;color:inherit">Targets</a>
-        <a href="#methodology" style="font-size:14px;text-decoration:none;color:inherit">Methodology</a>
-        <a href="#commission" style="font-size:14px;text-decoration:none;color:inherit">Commission</a>
-      </span>
+    <section class="block" id="pilot">
+      <div class="block-head">
+        <span class="kicker">Pilot</span>
+        <h2>One thesis, one report, &euro;500.</h2>
+        <p>Concierge pilot pricing while the first sector theses ship. If the report doesn&rsquo;t
+          give you conversations worth having, tell us why and don&rsquo;t come back &mdash; that&rsquo;s the deal.</p>
+      </div>
+      <div class="price-card">
+        <div>
+          <div class="price-tag num">&euro;500 <small>per thesis report</small></div>
+          <ul>
+            <li><b>50 ranked off-market targets</b> in your sector thesis, scored 0&ndash;100</li>
+            <li><b>Per-signal breakdown</b> for every company &mdash; defensible in front of a committee</li>
+            <li><b>CSV appendix</b> ready for your CRM or outreach tooling</li>
+            <li><b>Methodology page</b> with honest caveats and lawful-basis note</li>
+            <li><b>One revision</b> of exclusions and region filters included</li>
+            <li><b>Delivery in 5 working days</b> from thesis confirmation</li>
+          </ul>
+        </div>
+        <div class="price-cta">
+          <a class="btn btn-primary" href="mailto:umut.bakin@torquefoundry.com?subject=SuccessionScope%20pilot%20report&body=Hi%20Umut%2C%0A%0AI%27d%20like%20to%20commission%20a%20SuccessionScope%20pilot%20report.%0A%0AThesis%20%2F%20sector%3A%20%0ARegions%20(optional)%3A%20%0AExclusions%20(optional)%3A%20">Commission a report</a>
+          <p>Opens an email to <a href="mailto:umut.bakin@torquefoundry.com">umut.bakin@torquefoundry.com</a> with a
+            short thesis template. No account, no subscription, no call required.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <span class="kicker">Questions</span>
+        <h2>The short answers</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Where does the data come from?</summary>
+          <p>Two official sources only: the Companies House bulk register snapshot (refreshed monthly)
+            and the Companies House public API for officer records. Nothing scraped, nothing bought,
+            nothing private.</p>
+        </details>
+        <details>
+          <summary>Is this GDPR-compliant?</summary>
+          <p>The pipeline processes public-register data under legitimate interest, stores director
+            births as month/year only (exactly as Companies House publishes them), reports ages only as
+            five-year bands, and every report names a removal-request contact. The methodology page
+            states plainly what a score is and is not.</p>
+        </details>
+        <details>
+          <summary>Can a score tell me an owner wants to sell?</summary>
+          <p>No &mdash; and we print that on every report. A score measures similarity to typical
+            pre-succession profiles from public filings. It tells you where a respectful, well-timed
+            conversation is most likely to be worth having. The conversation is still yours to have.</p>
+        </details>
+        <details>
+          <summary>What sectors can you cover?</summary>
+          <p>Any UK sector definable by SIC codes. Logistics &amp; freight (SIC 49&ndash;53) ships now,
+            manufacturing is configured next, and a custom thesis takes about a day to set up before
+            the standard five-day delivery.</p>
+        </details>
+      </div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <span class="brand">SuccessionScope</span>
+          <p>Succession intelligence from public registers.<br>
+            Contact: <a href="mailto:umut.bakin@torquefoundry.com">umut.bakin@torquefoundry.com</a></p>
+        </div>
+        <p>Built exclusively on Companies House open data (Crown copyright, used under the Companies House
+          usage terms). Scores prioritise research; they do not predict intent. Director ages appear only
+          as five-year bands. Removal requests: <a href="mailto:umut.bakin@torquefoundry.com">umut.bakin@torquefoundry.com</a>.
+          The <a href="report.html">sample report</a> and <a href="app.html">app demo</a> on this site use
+          synthetic data &mdash; no real companies are shown.</p>
+      </div>
     </div>
-    <p class="dim" style="font-size:13.5px;line-height:24px;max-width:72ch;margin:20px 0 0;color:color-mix(in srgb,var(--color-text) 60%,transparent)">Built from Companies House open data (Crown copyright, used under the Companies House usage terms). Score engine v0.1.0 · Pressed July 2026 · Removal requests: removals@successionscope.example · © 2026 SuccessionScope</p>
   </footer>
+</main>
 
-</div>
-<script>
-var DATA = [{"rank": 1, "name": "BRAMFORD FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000013", "sic": "49413", "inc": "1991-08-13", "locality": "Bristol", "score": 95.0, "why": "Oldest active director in age band 65–70; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 2, "name": "OAKENSHAW LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000014", "sic": "49414", "inc": "1992-03-16", "locality": "Glasgow", "score": 95.0, "why": "Oldest active director in age band 65–70; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 3, "name": "TILLBROOK HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000015", "sic": "49415", "inc": "1993-10-19", "locality": "Cardiff", "score": 95.0, "why": "Oldest active director in age band 65–70; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 4, "name": "MARWICK FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000016", "sic": "49416", "inc": "1994-05-22", "locality": "Manchester", "score": 95.0, "why": "Oldest active director in age band 65–70; all active directors share a surname; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 5, "name": "CRANLEIGH HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000018", "sic": "49418", "inc": "1996-07-01", "locality": "Plymouth", "score": 95.0, "why": "Oldest active director in age band 65–70; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 6, "name": "DOVERSTONE FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000019", "sic": "49419", "inc": "1997-02-04", "locality": "Dundee", "score": 95.0, "why": "Oldest active director in age band 70+; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 7, "name": "ELMSWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000020", "sic": "49410", "inc": "1998-09-07", "locality": "Swansea", "score": 95.0, "why": "Oldest active director in age band 70+; all active directors share a surname; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 8, "name": "QUARRINGTON HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000021", "sic": "49411", "inc": "1999-04-10", "locality": "Hull", "score": 95.0, "why": "Oldest active director in age band 70+; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 9, "name": "HARTWELL HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000036", "sic": "49416", "inc": "1986-01-01", "locality": "Leeds", "score": 95.0, "why": "Oldest active director in age band 65–70; all active directors share a surname; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 10, "name": "BRAMFORD FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000037", "sic": "49417", "inc": "1987-08-04", "locality": "Bristol", "score": 95.0, "why": "Oldest active director in age band 65–70; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 11, "name": "TILLBROOK HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000039", "sic": "49419", "inc": "1989-10-10", "locality": "Cardiff", "score": 95.0, "why": "Oldest active director in age band 65–70; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 12, "name": "MARWICK FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000040", "sic": "49410", "inc": "1990-05-13", "locality": "Manchester", "score": 95.0, "why": "Oldest active director in age band 70+; all active directors share a surname; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 13, "name": "FENWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000041", "sic": "49411", "inc": "1991-12-16", "locality": "Norwich", "score": 95.0, "why": "Oldest active director in age band 70+; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 14, "name": "CRANLEIGH HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000042", "sic": "49412", "inc": "1992-07-19", "locality": "Plymouth", "score": 95.0, "why": "Oldest active director in age band 70+; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 15, "name": "DOVERSTONE FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000043", "sic": "49413", "inc": "1993-02-22", "locality": "Dundee", "score": 95.0, "why": "Oldest active director in age band 70+; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 16, "name": "WHITLOCKE FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000058", "sic": "49418", "inc": "1980-11-13", "locality": "Preston", "score": 95.0, "why": "Oldest active director in age band 65–70; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 17, "name": "HARTWELL HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000012", "sic": "49412", "inc": "1990-01-10", "locality": "Leeds", "score": 93.0, "why": "Oldest active director in age band 60–65; all active directors share a surname; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 38.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 18, "name": "ASHCOMBE LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000035", "sic": "49415", "inc": "1985-06-25", "locality": "Derby", "score": 93.0, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 38.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 19, "name": "QUARRINGTON HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000057", "sic": "49417", "inc": "1979-04-10", "locality": "Hull", "score": 93.0, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 38.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 20, "name": "WHITLOCKE FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000034", "sic": "49414", "inc": "1984-11-22", "locality": "Preston", "score": 91.0, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 36.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 21, "name": "ELMSWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000056", "sic": "49416", "inc": "1978-09-07", "locality": "Swansea", "score": 91.0, "why": "Oldest active director in age band 60–65; all active directors share a surname; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 36.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 22, "name": "ASHCOMBE LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000011", "sic": "49411", "inc": "1989-06-07", "locality": "Derby", "score": 89.0, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 34.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 23, "name": "QUARRINGTON HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000033", "sic": "49413", "inc": "1983-04-19", "locality": "Hull", "score": 89.0, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 34.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 24, "name": "ELMSWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000032", "sic": "49412", "inc": "1982-09-16", "locality": "Swansea", "score": 87.0, "why": "Oldest active director in age band 60–65; all active directors share a surname; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 32.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 25, "name": "DOVERSTONE FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000055", "sic": "49415", "inc": "2005-02-04", "locality": "Dundee", "score": 85.4, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 34.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 6.4, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 26, "name": "QUARRINGTON HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000009", "sic": "49419", "inc": "1987-04-01", "locality": "Hull", "score": 85.0, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 30.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 27, "name": "FENWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000053", "sic": "49413", "inc": "2003-12-25", "locality": "Norwich", "score": 84.5, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 32.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 7.5, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 28, "name": "CRANLEIGH HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000054", "sic": "49414", "inc": "2004-07-01", "locality": "Plymouth", "score": 84.0, "why": "Oldest active director in age band 60–65; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 32.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 7.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 29, "name": "FENWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000017", "sic": "49417", "inc": "1995-12-25", "locality": "Norwich", "score": 80.0, "why": "Oldest active director in age band 65–70; all active directors share a surname; company is 30 years old.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 0.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 30, "name": "OAKENSHAW LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000038", "sic": "49418", "inc": "1988-03-07", "locality": "Glasgow", "score": 80.0, "why": "Oldest active director in age band 65–70; all active directors share a surname; company is 38 years old.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 0.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 31, "name": "ASHCOMBE LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000059", "sic": "49419", "inc": "1981-06-16", "locality": "Derby", "score": 80.0, "why": "Oldest active director in age band 65–70; all active directors share a surname; company is 45 years old.", "signals": [{"label": "Director age", "pts": 40, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 0.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 32, "name": "ELMSWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000008", "sic": "49418", "inc": "1986-09-25", "locality": "Swansea", "score": 79.0, "why": "Oldest active director in age band 55–60; all active directors share a surname; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 24.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 33, "name": "FENWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000029", "sic": "49419", "inc": "1979-12-07", "locality": "Norwich", "score": 79.0, "why": "Oldest active director in age band 55–60; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 24.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 34, "name": "CRANLEIGH HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000030", "sic": "49410", "inc": "1980-07-10", "locality": "Plymouth", "score": 79.0, "why": "Oldest active director in age band 55–60; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 24.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 35, "name": "TILLBROOK HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000051", "sic": "49411", "inc": "2001-10-19", "locality": "Cardiff", "score": 78.7, "why": "Oldest active director in age band 55–60; single active director; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 24.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 9.7, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 36, "name": "DOVERSTONE FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000007", "sic": "49417", "inc": "1985-02-22", "locality": "Dundee", "score": 73.0, "why": "Single active director; oldest active director in age band 55–60; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 18.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 37, "name": "MARWICK FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000028", "sic": "49418", "inc": "1978-05-04", "locality": "Manchester", "score": 73.0, "why": "All active directors share a surname; oldest active director in age band 55–60; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 18.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 38, "name": "OAKENSHAW LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000050", "sic": "49410", "inc": "2000-03-16", "locality": "Glasgow", "score": 73.0, "why": "Single active director; oldest active director in age band 55–60; no director under 45 appointed in last 5 years.", "signals": [{"label": "Director age", "pts": 18.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 39, "name": "WHITLOCKE FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000010", "sic": "49410", "inc": "1988-11-04", "locality": "Preston", "score": 72.0, "why": "Oldest active director in age band 60–65; all active directors share a surname; company is 37 years old.", "signals": [{"label": "Director age", "pts": 32.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 0.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 40, "name": "DOVERSTONE FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000031", "sic": "49411", "inc": "1981-02-13", "locality": "Dundee", "score": 70.0, "why": "Oldest active director in age band 60–65; all active directors share a surname; company is 45 years old.", "signals": [{"label": "Director age", "pts": 30.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 0.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 41, "name": "MARWICK FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000052", "sic": "49412", "inc": "2002-05-22", "locality": "Manchester", "score": 69.1, "why": "Oldest active director in age band 60–65; all active directors share a surname; active, no strike-off or insolvency markers.", "signals": [{"label": "Director age", "pts": 30.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 0.0, "max": 15}, {"label": "Company age", "pts": 9.1, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 42, "name": "FENWORTH LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000005", "sic": "49415", "inc": "1983-12-16", "locality": "Norwich", "score": 67.0, "why": "Single active director; no director under 45 appointed in last 5 years; oldest active director in age band 55–60.", "signals": [{"label": "Director age", "pts": 12.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 43, "name": "CRANLEIGH HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000006", "sic": "49416", "inc": "1984-07-19", "locality": "Plymouth", "score": 67.0, "why": "Single active director; no director under 45 appointed in last 5 years; oldest active director in age band 55–60.", "signals": [{"label": "Director age", "pts": 12.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 44, "name": "BRAMFORD FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000049", "sic": "49419", "inc": "1999-08-13", "locality": "Bristol", "score": 67.0, "why": "Single active director; no director under 45 appointed in last 5 years; oldest active director in age band 55–60.", "signals": [{"label": "Director age", "pts": 12.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 45, "name": "TILLBROOK HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000027", "sic": "49417", "inc": "2005-10-01", "locality": "Cardiff", "score": 62.7, "why": "Single active director; no director under 45 appointed in last 5 years; oldest active director in age band 55–60.", "signals": [{"label": "Director age", "pts": 12.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 5.7, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 46, "name": "MARWICK FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000004", "sic": "49414", "inc": "1982-05-13", "locality": "Manchester", "score": 61.0, "why": "All active directors share a surname; no director under 45 appointed in last 5 years; company is 44 years old.", "signals": [{"label": "Director age", "pts": 6.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 47, "name": "HARTWELL HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000048", "sic": "49418", "inc": "1998-01-10", "locality": "Leeds", "score": 61.0, "why": "All active directors share a surname; no director under 45 appointed in last 5 years; company is 28 years old.", "signals": [{"label": "Director age", "pts": 6.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 48, "name": "OAKENSHAW LOGISTICS GROUP (SYNTHETIC) LTD", "crn": "ZZ000026", "sic": "49416", "inc": "2004-03-25", "locality": "Glasgow", "score": 58.3, "why": "Single active director; no director under 45 appointed in last 5 years; active, no strike-off or insolvency markers.", "signals": [{"label": "Director age", "pts": 6.0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 7.3, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 49, "name": "HARTWELL HAULAGE (SYNTHETIC) LTD", "crn": "ZZ000000", "sic": "49410", "inc": "1978-01-01", "locality": "Leeds", "score": 55.0, "why": "All active directors share a surname; no director under 45 appointed in last 5 years; company is 48 years old.", "signals": [{"label": "Director age", "pts": 0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}, {"rank": 50, "name": "BRAMFORD FREIGHT SERVICES (SYNTHETIC) LTD", "crn": "ZZ000001", "sic": "49411", "inc": "1979-08-04", "locality": "Bristol", "score": 55.0, "why": "Single active director; no director under 45 appointed in last 5 years; company is 46 years old.", "signals": [{"label": "Director age", "pts": 0, "max": 40}, {"label": "Sole/family control", "pts": 20.0, "max": 20}, {"label": "No heir signal", "pts": 15.0, "max": 15}, {"label": "Company age", "pts": 10.0, "max": 10}, {"label": "Stability", "pts": 10.0, "max": 10}, {"label": "Recent events", "pts": 0.0, "max": 5}]}];
-var state = { sort: "score", dir: -1, min: 0, open: {} };
-
-function esc(s) {
-  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-function sortedRows() {
-  var rows = DATA.filter(function (r) { return r.score >= state.min; });
-  var k = state.sort, d = state.dir;
-  rows.sort(function (a, b) {
-    var x = a[k], y = b[k];
-    if (k === "name") { x = x.toLowerCase(); y = y.toLowerCase(); }
-    if (x < y) return -d;
-    if (x > y) return d;
-    return a.rank - b.rank;
-  });
-  return rows;
-}
-
-function signalHtml(sig) {
-  var pct = sig.max ? Math.round(100 * sig.pts / sig.max) : 0;
-  return '<div>' +
-    '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px">' +
-    '<span style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 70%,transparent)">' + esc(sig.label) + '</span>' +
-    '<span class="headnum mono" style="font-size:14px">' + sig.pts + '/' + sig.max + '</span>' +
-    '</div><div class="sigbar"><div style="width:' + pct + '%"></div></div></div>';
-}
-
-function render() {
-  var rows = sortedRows();
-  var out = "";
-  rows.forEach(function (r) {
-    var open = !!state.open[r.crn];
-    out += '<div>' +
-      '<div class="rowgrid trow" role="row" data-crn="' + esc(r.crn) + '" tabindex="0">' +
-      '<span class="headnum mono" style="font-size:15px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">' + String(r.rank).padStart(2, "0") + '</span>' +
-      '<span class="headnum" style="font-size:16px;line-height:1.3">' + esc(r.name) + '</span>' +
-      '<span class="dim mono">' + esc(r.crn) + '</span>' +
-      '<span class="dim mono">' + esc(r.sic) + '</span>' +
-      '<span class="dim mono">' + esc(String(r.inc).slice(0, 4)) + '</span>' +
-      '<span class="dim">' + esc(r.locality) + '</span>' +
-      '<span class="bar"><span style="width:' + Math.min(r.score, 100) + '%"></span></span>' +
-      '<span class="headnum mono" style="font-size:17px;text-align:right">' + r.score + '</span>' +
-      '</div>';
-    if (open) {
-      var meta = "CRN " + r.crn + " · SIC " + r.sic + " · incorporated " + r.inc +
-        " · " + r.locality + " · score " + r.score + "/100";
-      out += '<div style="padding:20px 10px 26px 66px;border-bottom:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">' +
-        '<p style="margin:0 0 6px;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 60%,transparent)">' + esc(meta) + '</p>' +
-        '<p style="margin:0 0 18px;font-family:var(--font-heading);font-style:italic;font-weight:400;font-size:17px;line-height:28px;max-width:64ch">' + esc(r.why) + '</p>' +
-        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px 40px;max-width:900px">' +
-        r.signals.map(signalHtml).join("") + '</div></div>';
-    }
-    out += '</div>';
-  });
-  document.getElementById("rows").innerHTML = out;
-
-  var shown = rows.length === DATA.length
-    ? "Showing all " + DATA.length + "."
-    : "Showing " + rows.length + " of " + DATA.length + " at " + state.min + "+.";
-  document.getElementById("shownLine").textContent = shown;
-
-  var arrows = { name: "arrName", inc: "arrInc", score: "arrScore" };
-  Object.keys(arrows).forEach(function (k) {
-    document.getElementById(arrows[k]).textContent =
-      state.sort === k ? (state.dir === 1 ? "↑" : "↓") : "";
-  });
-}
-
-document.getElementById("rows").addEventListener("click", function (e) {
-  var row = e.target.closest(".trow");
-  if (!row) return;
-  var crn = row.getAttribute("data-crn");
-  state.open[crn] = !state.open[crn];
-  render();
-});
-document.getElementById("rows").addEventListener("keydown", function (e) {
-  if (e.key !== "Enter" && e.key !== " ") return;
-  var row = e.target.closest(".trow");
-  if (!row) return;
-  e.preventDefault();
-  var crn = row.getAttribute("data-crn");
-  state.open[crn] = !state.open[crn];
-  render();
-});
-
-document.querySelectorAll("button.colhead").forEach(function (btn) {
-  btn.addEventListener("click", function () {
-    var k = btn.getAttribute("data-sort");
-    if (state.sort === k) { state.dir = -state.dir; }
-    else { state.sort = k; state.dir = k === "score" ? -1 : 1; }
-    render();
-  });
-});
-
-document.querySelectorAll("#minOpts .minopt").forEach(function (btn) {
-  btn.addEventListener("click", function () {
-    state.min = Number(btn.getAttribute("data-min"));
-    document.querySelectorAll("#minOpts .minopt").forEach(function (b) {
-      b.setAttribute("aria-pressed", String(b === btn));
-    });
-    render();
-  });
-});
-
-document.getElementById("commissionBtn").addEventListener("click", function () {
-  var from = document.getElementById("commissionEmail").value.trim();
-  var subject = encodeURIComponent("Commission a SuccessionScope report (€500)");
-  var body = encodeURIComponent(
-    "Industry / thesis:\nRegion (optional):\nReply-to: " + (from || "") + "\n");
-  window.location.href = "mailto:hello@successionscope.example?subject=" + subject + "&body=" + body;
-});
-
-render();
-</script>
 </body>
 </html>
