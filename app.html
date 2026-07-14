@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SuccessionScope — App demo</title>
+<style>
+/* Broadsheet design-system tokens (claude.ai/design project, styles.css) */
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+:root {
+  --color-bg: #f3f2f2;
+  --color-surface: #eae9e9;
+  --color-text: #201e1d;
+  --color-accent: #0088b0;
+  --color-accent-2: #d6006c;
+  --color-divider: color-mix(in srgb, #201e1d 16%, transparent);
+  --color-neutral-100: #f8f4f4;
+  --color-neutral-800: #444141;
+  --color-accent-100: #e9f8ff;
+  --color-accent-600: #1186ac;
+  --color-accent-700: #006786;
+  --color-accent-800: #004961;
+  --color-accent-2-700: #aa0b56;
+  --font-heading: "Source Serif 4", system-ui, sans-serif;
+  --font-heading-weight: 600;
+  --font-body: "Source Serif 4", system-ui, sans-serif;
+  --space-1: 5px; --space-2: 10px; --space-3: 15px; --space-4: 20px;
+  --radius-sm: 1px; --radius-md: 2px; --radius-lg: 4px;
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #2d2b2b 14%, transparent);
+}
+*, *::before, *::after { box-sizing:border-box; }
+body { margin:0; background:var(--color-bg); color:var(--color-text);
+  font-family:var(--font-body); font-size:15px; line-height:1.55; }
+h1,h2,h3 { font-family:var(--font-heading); font-weight:var(--font-heading-weight);
+  line-height:1.12; letter-spacing:-0.015em; margin:0 0 var(--space-2); }
+p { margin:0 0 var(--space-3); }
+a { color:var(--color-accent-700); text-underline-offset:3px; }
+a:hover { color:var(--color-accent); }
+:focus { outline:none; }
+:focus-visible { outline:2px solid var(--color-accent); outline-offset:2px; }
+::selection { background:color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  cursor:pointer; text-decoration:none; font-family:var(--font-heading);
+  font-weight:var(--font-heading-weight); font-size:14px; line-height:1.2;
+  color:var(--color-text); background:transparent; border:1px solid transparent;
+  padding:var(--space-2) calc(var(--space-3) * 1.2); border-radius:var(--radius-md); }
+.btn:disabled { opacity:0.45; cursor:not-allowed; }
+.btn-primary { background:var(--color-accent); color:var(--color-bg); }
+.btn-primary:hover { background:var(--color-accent-600); }
+.btn-secondary { border-color:var(--color-divider); }
+.btn-secondary:hover { background:color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-ghost { color:var(--color-accent); padding-inline:var(--space-1); }
+.btn-ghost:hover { background:color-mix(in srgb, var(--color-accent) 10%, transparent); }
+
+.input { width:100%; min-height:36px; padding:6px 10px; font:inherit; font-size:14px;
+  color:var(--color-text); caret-color:var(--color-accent); background:var(--color-surface);
+  border:1px solid var(--color-divider); border-radius:var(--radius-md); }
+.input::placeholder { color:color-mix(in srgb, var(--color-text) 65%, transparent); opacity:1; }
+.input:hover { border-color:color-mix(in srgb, var(--color-text) 45%, transparent); }
+.input:focus-visible { border-color:var(--color-accent); outline-offset:0; }
+textarea.input { min-height:60px; }
+.field > label { display:block; font-size:12px; margin-bottom:5px;
+  color:color-mix(in srgb, var(--color-text) 70%, transparent); }
+
+.tag { display:inline-flex; align-items:center; font-size:11px; letter-spacing:0.02em;
+  padding:3px 10px; border-radius:calc(var(--radius-md) * 0.75); border:0; }
+.tag-accent { background:var(--color-accent-100); color:var(--color-accent-800); }
+.tag-neutral { background:var(--color-neutral-100); color:var(--color-neutral-800); }
+
+.seg { display:inline-flex; overflow:hidden; border:1px solid var(--color-divider);
+  border-radius:var(--radius-md); }
+.seg-opt { display:inline-flex; align-items:center; gap:6px; padding:7px 12px;
+  font-size:13px; cursor:pointer; font-family:var(--font-body); border:0;
+  background:transparent; color:inherit; font-feature-settings:'tnum' 1; }
+.seg-opt + .seg-opt { border-left:1px solid var(--color-divider); }
+.seg-opt[aria-pressed="true"] { background:var(--color-accent); color:var(--color-bg); }
+.seg-opt[aria-pressed="false"]:hover { background:color-mix(in srgb, var(--color-text) 7%, transparent); }
+
+.card { display:flex; flex-direction:column; gap:var(--space-2);
+  padding:var(--space-3); border-radius:var(--radius-md); background:var(--color-surface); }
+.elev-sm { box-shadow:var(--shadow-sm); }
+
+.table { width:100%; border-collapse:collapse; font-size:14px; }
+.table th { text-align:left; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:color-mix(in srgb, var(--color-text) 60%, transparent);
+  padding:var(--space-2); border-bottom:1px solid var(--color-divider); }
+.table td { padding:var(--space-2);
+  border-bottom:1px solid color-mix(in srgb, var(--color-text) 8%, transparent); }
+.table tbody tr:hover { background:color-mix(in srgb, var(--color-text) 4%, transparent); }
+
+.nav-brand { font-family:var(--font-heading); font-weight:var(--font-heading-weight); }
+.navbtn { display:flex; justify-content:space-between; align-items:baseline; gap:8px;
+  font-family:var(--font-heading); font-size:15px; text-align:left; padding:8px 10px;
+  border:0; border-radius:var(--radius-md); cursor:pointer; width:100%;
+  background:transparent; color:inherit; font-weight:400; }
+.navbtn:hover { background:color-mix(in srgb, var(--color-text) 5%, transparent); }
+.navbtn[aria-current="true"] { background:color-mix(in srgb, var(--color-accent) 10%, transparent);
+  color:var(--color-accent-800); font-weight:600; }
+.navbtn .count { font-size:12px; font-feature-settings:'tnum' 1;
+  color:color-mix(in srgb, var(--color-text) 50%, transparent); }
+
+.kicker { font-size:11px; letter-spacing:0.09em; text-transform:uppercase;
+  color:color-mix(in srgb, var(--color-text) 55%, transparent); font-weight:400;
+  font-family:var(--font-body); margin:0 0 8px; }
+.dim { color:color-mix(in srgb, var(--color-text) 65%, transparent); }
+.mono { font-feature-settings:'tnum' 1; }
+.headfont { font-family:var(--font-heading); font-weight:var(--font-heading-weight); }
+.colhead { font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:color-mix(in srgb, var(--color-text) 60%, transparent); }
+.pgrid { display:grid;
+  grid-template-columns:150px minmax(200px,1.6fr) 64px minmax(96px,0.8fr) 52px 84px minmax(180px,1.2fr);
+  gap:0 16px; }
+.prow { align-items:center; padding:11px 10px; cursor:pointer;
+  border-bottom:1px solid color-mix(in srgb, var(--color-text) 8%, transparent); }
+.prow:hover { background:color-mix(in srgb, var(--color-text) 4%, transparent); }
+.scorebar { flex:1; height:8px; border-radius:var(--radius-sm); overflow:hidden;
+  background:color-mix(in srgb, var(--color-text) 8%, transparent); }
+.scorebar > span { display:block; height:100%; background:var(--color-accent); }
+.chipbtn { cursor:pointer; font-feature-settings:'tnum' 1; background:transparent;
+  color:inherit; border:1px solid var(--color-divider); }
+.chipbtn:hover { border-color:var(--color-accent); }
+.chipbtn[aria-pressed="true"] { border-color:var(--color-accent);
+  background:var(--color-accent-100); color:var(--color-accent-800); }
+.sicrow { display:grid; grid-template-columns:64px 1fr auto; gap:12px; align-items:baseline;
+  text-align:left; font-family:var(--font-body); font-size:14px; padding:7px 10px;
+  border:0; border-radius:var(--radius-md); cursor:pointer; background:transparent; color:inherit; }
+.sicrow:hover { background:color-mix(in srgb, var(--color-text) 5%, transparent); }
+.sicrow[aria-pressed="true"] { background:color-mix(in srgb, var(--color-accent) 8%, transparent); }
+</style>
+</head>
+<body>
+<div style="display:flex;min-height:100vh">
+
+  <aside style="width:208px;flex:none;padding:26px 22px;display:flex;flex-direction:column;gap:30px">
+    <div>
+      <div class="nav-brand" style="font-size:19px;letter-spacing:-0.01em">SuccessionScope</div>
+      <div class="kicker" style="margin-top:4px">Succession intelligence</div>
+    </div>
+    <nav id="nav" style="display:flex;flex-direction:column;gap:2px" aria-label="Primary"></nav>
+    <div style="margin-top:auto;font-size:12px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 60%,transparent)">
+      Built on Companies House open data. Scores prioritise research; they do not predict intent.
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;padding:0 clamp(24px,3.5vw,56px) 64px">
+    <header style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:22px 0 8px">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <span class="kicker" style="margin:0">Active thesis</span>
+        <select class="input" id="thesisSelect" data-action="thesis" style="font-family:var(--font-heading);font-weight:600;font-size:14px;padding:5px 10px;min-width:230px;width:auto"></select>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+        <span class="tag tag-neutral mono" id="planBadge"></span>
+        <span class="tag tag-accent">Score engine v0.1.0</span>
+      </div>
+    </header>
+    <hr style="height:5px;border:0;margin:0 0 10px;border-top:2px solid var(--color-text);border-bottom:1px solid var(--color-text)">
+    <p style="margin:0;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-2-700)">Demo edition — fictional companies and filings</p>
+    <div id="screen" style="margin-top:16px"></div>
+  </main>
+</div>
+
+<script>
+var APP = {"demo": true, "companies": [{"id": 0, "name": "Fenland Freight Services Ltd", "crn": "ZZ822473", "sic": "49410", "sicLabel": "Freight transport by road", "region": "East of England", "locality": "Wisbech", "inc": 1984, "age": 42, "band": "65–70", "score": 100, "chips": ["SOLE CONTROL", "NO SUCCESSOR", "25+ YRS", "AUDITOR CHANGE"], "signals": [{"label": "Director age band", "pts": 40, "max": 40, "note": "Eldest active director in the 65–70 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "42 years trading since 1984 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 5, "max": 5, "note": "Auditor and registered-address change inside 18 months — advisers may have arrived."}], "directors": [{"name": "Raymond Harrold", "role": "Director", "appointed": "1984", "band": "65–70"}], "timeline": [{"year": "1984", "label": "Incorporated as a private limited company"}, {"year": "1984", "label": "Raymond Harrold appointed director"}, {"year": "2006", "label": "Director resigned — Janet Pearse"}, {"year": "2025", "label": "Auditor changed — new firm appointed", "hot": true}, {"year": "2025", "label": "Registered office address changed", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 1}, {"id": 1, "name": "Caldbeck Transport & Storage Ltd", "crn": "ZZ237819", "sic": "52101", "sicLabel": "Warehousing (refrigerated)", "region": "North West", "locality": "Carlisle", "inc": 1988, "age": 38, "band": "65–70", "score": 95, "chips": ["FAMILY BOARD", "NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 40, "max": 40, "note": "Eldest active director in the 65–70 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "All directors share the surname Whittaker — a family board."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "38 years trading since 1988 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Margaret Whittaker", "role": "Director", "appointed": "1988", "band": "65–70"}, {"name": "Patricia Whittaker", "role": "Director, Secretary", "appointed": "1998", "band": "55–60"}, {"name": "Barbara Whittaker", "role": "Director", "appointed": "2002", "band": "40–45"}], "timeline": [{"year": "1988", "label": "Incorporated as a private limited company"}, {"year": "1988", "label": "Margaret Whittaker appointed director"}, {"year": "1998", "label": "Patricia Whittaker appointed director"}, {"year": "2002", "label": "Barbara Whittaker appointed director"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 2}, {"id": 3, "name": "Ouse Valley Couriers Ltd", "crn": "ZZ481956", "sic": "53201", "sicLabel": "Courier activities", "region": "Yorkshire", "locality": "York", "inc": 1990, "age": 36, "band": "60–65", "score": 89, "chips": ["SOLE CONTROL", "NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 34, "max": 40, "note": "Eldest active director in the 60–65 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "36 years trading since 1990 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Sheila Pearse", "role": "Director", "appointed": "1990", "band": "60–65"}], "timeline": [{"year": "1990", "label": "Incorporated as a private limited company"}, {"year": "1990", "label": "Sheila Pearse appointed director"}, {"year": "2015", "label": "Director resigned — Kenneth Renwick"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 3}, {"id": 4, "name": "Gwynedd Freight Ltd", "crn": "ZZ096348", "sic": "49410", "sicLabel": "Freight transport by road", "region": "Wales", "locality": "Bangor", "inc": 1986, "age": 40, "band": "65–70", "score": 85, "chips": ["SOLE CONTROL", "NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 40, "max": 40, "note": "Eldest active director in the 65–70 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "40 years trading since 1986 — full points."}, {"label": "Stability", "pts": 0, "max": 10, "note": "Filing irregularities in the last 24 months — partial deduction."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Alan Maddern", "role": "Director", "appointed": "1986", "band": "65–70"}], "timeline": [{"year": "1986", "label": "Incorporated as a private limited company"}, {"year": "1986", "label": "Alan Maddern appointed director"}, {"year": "2024", "label": "Accounts filed late (3 months)", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 4}, {"id": 5, "name": "Stour Estuary Shipping Agents Ltd", "crn": "ZZ688552", "sic": "52290", "sicLabel": "Freight forwarding & support", "region": "East of England", "locality": "Harwich", "inc": 1982, "age": 44, "band": "65–70", "score": 85, "chips": ["FAMILY BOARD", "25+ YRS", "AUDITOR CHANGE"], "signals": [{"label": "Director age band", "pts": 40, "max": 40, "note": "Eldest active director in the 65–70 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "All directors share the surname Cattermole — a family board."}, {"label": "No heir signal", "pts": 0, "max": 15, "note": "A younger director joined recently — possible successor in place."}, {"label": "Company age", "pts": 10, "max": 10, "note": "44 years trading since 1982 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 5, "max": 5, "note": "Auditor and registered-address change inside 18 months — advisers may have arrived."}], "directors": [{"name": "Brian Cattermole", "role": "Director", "appointed": "1982", "band": "65–70"}, {"name": "Colin Cattermole", "role": "Director, Secretary", "appointed": "1992", "band": "55–60"}, {"name": "Terence Cattermole", "role": "Director", "appointed": "1996", "band": "40–45"}], "timeline": [{"year": "1982", "label": "Incorporated as a private limited company"}, {"year": "1982", "label": "Brian Cattermole appointed director"}, {"year": "1992", "label": "Colin Cattermole appointed director"}, {"year": "1996", "label": "Terence Cattermole appointed director"}, {"year": "2025", "label": "Auditor changed — new firm appointed", "hot": true}, {"year": "2025", "label": "Registered office address changed", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 5}, {"id": 6, "name": "Mersey Dock Haulage Ltd", "crn": "ZZ351177", "sic": "49410", "sicLabel": "Freight transport by road", "region": "North West", "locality": "Liverpool", "inc": 1989, "age": 37, "band": "60–65", "score": 84, "chips": ["SOLE CONTROL", "NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 34, "max": 40, "note": "Eldest active director in the 60–65 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "37 years trading since 1989 — full points."}, {"label": "Stability", "pts": 5, "max": 10, "note": "Filing irregularities in the last 24 months — partial deduction."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Patricia Renwick", "role": "Director", "appointed": "1989", "band": "60–65"}], "timeline": [{"year": "1989", "label": "Incorporated as a private limited company"}, {"year": "1989", "label": "Patricia Renwick appointed director"}, {"year": "2011", "label": "Director resigned — Terence Trevithick"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 6}, {"id": 7, "name": "Blackmore Vale Distribution Ltd", "crn": "ZZ544631", "sic": "49410", "sicLabel": "Freight transport by road", "region": "South West", "locality": "Shaftesbury", "inc": 1991, "age": 35, "band": "60–65", "score": 84, "chips": ["FAMILY BOARD", "NO SUCCESSOR", "25+ YRS", "AUDITOR CHANGE"], "signals": [{"label": "Director age band", "pts": 34, "max": 40, "note": "Eldest active director in the 60–65 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "All directors share the surname Bowyer — a family board."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "35 years trading since 1991 — full points."}, {"label": "Stability", "pts": 0, "max": 10, "note": "Filing irregularities in the last 24 months — partial deduction."}, {"label": "Recency events", "pts": 5, "max": 5, "note": "Auditor and registered-address change inside 18 months — advisers may have arrived."}], "directors": [{"name": "Gordon Bowyer", "role": "Director", "appointed": "1991", "band": "60–65"}, {"name": "Kenneth Bowyer", "role": "Director, Secretary", "appointed": "2001", "band": "55–60"}, {"name": "Geoffrey Bowyer", "role": "Director", "appointed": "2005", "band": "40–45"}], "timeline": [{"year": "1991", "label": "Incorporated as a private limited company"}, {"year": "1991", "label": "Gordon Bowyer appointed director"}, {"year": "2001", "label": "Kenneth Bowyer appointed director"}, {"year": "2005", "label": "Geoffrey Bowyer appointed director"}, {"year": "2025", "label": "Auditor changed — new firm appointed", "hot": true}, {"year": "2025", "label": "Registered office address changed", "hot": true}, {"year": "2024", "label": "Accounts filed late (3 months)", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 7}, {"id": 2, "name": "Solent Container Services Ltd", "crn": "ZZ573204", "sic": "52241", "sicLabel": "Cargo handling for water transport", "region": "South East", "locality": "Southampton", "inc": 1981, "age": 45, "band": "70+", "score": 80, "chips": ["NO SUCCESSOR", "25+ YRS", "AUDITOR CHANGE"], "signals": [{"label": "Director age band", "pts": 40, "max": 40, "note": "Eldest active director in the 70+ band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 0, "max": 20, "note": "Board is not concentrated; multiple unrelated directors."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "45 years trading since 1981 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 5, "max": 5, "note": "Auditor and registered-address change inside 18 months — advisers may have arrived."}], "directors": [{"name": "Derek Aldous", "role": "Director", "appointed": "1981", "band": "70+"}, {"name": "Gordon Aldous", "role": "Director, Secretary", "appointed": "1991", "band": "55–60"}], "timeline": [{"year": "1981", "label": "Incorporated as a private limited company"}, {"year": "1981", "label": "Derek Aldous appointed director"}, {"year": "1991", "label": "Gordon Aldous appointed director"}, {"year": "2025", "label": "Auditor changed — new firm appointed", "hot": true}, {"year": "2025", "label": "Registered office address changed", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 8}, {"id": 8, "name": "Kelso Road Services Ltd", "crn": "ZZ098414", "sic": "49410", "sicLabel": "Freight transport by road", "region": "Scotland", "locality": "Kelso", "inc": 1985, "age": 41, "band": "65–70", "score": 75, "chips": ["NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 40, "max": 40, "note": "Eldest active director in the 65–70 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 0, "max": 20, "note": "Board is not concentrated; multiple unrelated directors."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "41 years trading since 1985 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Norman Sillitoe", "role": "Director", "appointed": "1985", "band": "65–70"}, {"name": "Roy Dunmore", "role": "Director", "appointed": "1995", "band": "55–60"}], "timeline": [{"year": "1985", "label": "Incorporated as a private limited company"}, {"year": "1985", "label": "Norman Sillitoe appointed director"}, {"year": "1995", "label": "Roy Dunmore appointed director"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 9}, {"id": 9, "name": "Ashby Pallet Network Ltd", "crn": "ZZ689207", "sic": "52102", "sicLabel": "Warehousing (non-refrigerated)", "region": "East Midlands", "locality": "Ashby-de-la-Zouch", "inc": 1992, "age": 34, "band": "60–65", "score": 74, "chips": ["SOLE CONTROL", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 34, "max": 40, "note": "Eldest active director in the 60–65 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 0, "max": 15, "note": "A younger director joined recently — possible successor in place."}, {"label": "Company age", "pts": 10, "max": 10, "note": "34 years trading since 1992 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Janet Trevithick", "role": "Director", "appointed": "1992", "band": "60–65"}], "timeline": [{"year": "1992", "label": "Incorporated as a private limited company"}, {"year": "1992", "label": "Janet Trevithick appointed director"}, {"year": "2017", "label": "Director resigned — Raymond McAllister"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 10}, {"id": 12, "name": "Lomond Freight Forwarding Ltd", "crn": "ZZ112733", "sic": "52290", "sicLabel": "Freight forwarding & support", "region": "Scotland", "locality": "Glasgow", "inc": 1988, "age": 38, "band": "60–65", "score": 74, "chips": ["FAMILY BOARD", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 34, "max": 40, "note": "Eldest active director in the 60–65 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "All directors share the surname McAllister — a family board."}, {"label": "No heir signal", "pts": 0, "max": 15, "note": "A younger director joined recently — possible successor in place."}, {"label": "Company age", "pts": 10, "max": 10, "note": "38 years trading since 1988 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Kenneth McAllister", "role": "Director", "appointed": "1988", "band": "60–65"}, {"name": "Geoffrey McAllister", "role": "Director, Secretary", "appointed": "1998", "band": "55–60"}], "timeline": [{"year": "1988", "label": "Incorporated as a private limited company"}, {"year": "1988", "label": "Kenneth McAllister appointed director"}, {"year": "1998", "label": "Geoffrey McAllister appointed director"}, {"year": "2010", "label": "Director resigned — Sheila Sutcliffe"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 11}, {"id": 13, "name": "Tamar Valley Transport Ltd", "crn": "ZZ833914", "sic": "49410", "sicLabel": "Freight transport by road", "region": "South West", "locality": "Plymouth", "inc": 1994, "age": 32, "band": "60–65", "score": 73, "chips": ["SOLE CONTROL", "NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 34, "max": 40, "note": "Eldest active director in the 60–65 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 4, "max": 10, "note": "32 years trading since 1994 — full points."}, {"label": "Stability", "pts": 0, "max": 10, "note": "Filing irregularities in the last 24 months — partial deduction."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Roy Yeoman", "role": "Director", "appointed": "1994", "band": "60–65"}], "timeline": [{"year": "1994", "label": "Incorporated as a private limited company"}, {"year": "1994", "label": "Roy Yeoman appointed director"}, {"year": "2024", "label": "Accounts filed late (3 months)", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 12}, {"id": 10, "name": "Weald Cold Chain Ltd", "crn": "ZZ761845", "sic": "52101", "sicLabel": "Warehousing (refrigerated)", "region": "South East", "locality": "Tonbridge", "inc": 1993, "age": 33, "band": "55–60", "score": 72, "chips": ["SOLE CONTROL", "NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 22, "max": 40, "note": "Eldest active director in the 55–60 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "33 years trading since 1993 — full points."}, {"label": "Stability", "pts": 5, "max": 10, "note": "Filing irregularities in the last 24 months — partial deduction."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Colin Openshaw", "role": "Director", "appointed": "1993", "band": "55–60"}], "timeline": [{"year": "1993", "label": "Incorporated as a private limited company"}, {"year": "1993", "label": "Colin Openshaw appointed director"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 13}, {"id": 11, "name": "Perry Barr Logistics Ltd", "crn": "ZZ419668", "sic": "49410", "sicLabel": "Freight transport by road", "region": "West Midlands", "locality": "Birmingham", "inc": 1990, "age": 36, "band": "60–65", "score": 69, "chips": ["NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 34, "max": 40, "note": "Eldest active director in the 60–65 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 0, "max": 20, "note": "Board is not concentrated; multiple unrelated directors."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "36 years trading since 1990 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Barbara Farnworth", "role": "Director", "appointed": "1990", "band": "60–65"}, {"name": "Dorothy Whittaker", "role": "Director", "appointed": "2000", "band": "55–60"}], "timeline": [{"year": "1990", "label": "Incorporated as a private limited company"}, {"year": "1990", "label": "Barbara Farnworth appointed director"}, {"year": "2000", "label": "Dorothy Whittaker appointed director"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 14}, {"id": 14, "name": "Ribble Warehousing Ltd", "crn": "ZZ502587", "sic": "52103", "sicLabel": "Storage of goods", "region": "North West", "locality": "Preston", "inc": 1991, "age": 35, "band": "55–60", "score": 67, "chips": ["SOLE CONTROL", "NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 22, "max": 40, "note": "Eldest active director in the 55–60 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 10, "max": 10, "note": "35 years trading since 1991 — full points."}, {"label": "Stability", "pts": 0, "max": 10, "note": "Filing irregularities in the last 24 months — partial deduction."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Maureen Hesketh", "role": "Director", "appointed": "1991", "band": "55–60"}], "timeline": [{"year": "1991", "label": "Incorporated as a private limited company"}, {"year": "1991", "label": "Maureen Hesketh appointed director"}, {"year": "2024", "label": "Accounts filed late (3 months)", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 15}, {"id": 16, "name": "Chiltern Removals & Storage Ltd", "crn": "ZZ655109", "sic": "49420", "sicLabel": "Removal services", "region": "South East", "locality": "Aylesbury", "inc": 1992, "age": 34, "band": "55–60", "score": 67, "chips": ["FAMILY BOARD", "25+ YRS", "AUDITOR CHANGE"], "signals": [{"label": "Director age band", "pts": 22, "max": 40, "note": "Eldest active director in the 55–60 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "All directors share the surname Dunmore — a family board."}, {"label": "No heir signal", "pts": 0, "max": 15, "note": "A younger director joined recently — possible successor in place."}, {"label": "Company age", "pts": 10, "max": 10, "note": "34 years trading since 1992 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 5, "max": 5, "note": "Auditor and registered-address change inside 18 months — advisers may have arrived."}], "directors": [{"name": "Dorothy Dunmore", "role": "Director", "appointed": "1992", "band": "55–60"}, {"name": "Sheila Dunmore", "role": "Director, Secretary", "appointed": "2002", "band": "55–60"}], "timeline": [{"year": "1992", "label": "Incorporated as a private limited company"}, {"year": "1992", "label": "Dorothy Dunmore appointed director"}, {"year": "2002", "label": "Sheila Dunmore appointed director"}, {"year": "2025", "label": "Auditor changed — new firm appointed", "hot": true}, {"year": "2025", "label": "Registered office address changed", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 16}, {"id": 15, "name": "Hebden Bridge Carriers Ltd", "crn": "ZZ914466", "sic": "49410", "sicLabel": "Freight transport by road", "region": "Yorkshire", "locality": "Hebden Bridge", "inc": 1995, "age": 31, "band": "60–65", "score": 66, "chips": ["NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 34, "max": 40, "note": "Eldest active director in the 60–65 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 0, "max": 20, "note": "Board is not concentrated; multiple unrelated directors."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 7, "max": 10, "note": "31 years trading since 1995 — full points."}, {"label": "Stability", "pts": 10, "max": 10, "note": "Filing on time; no strike-off or insolvency events on record."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Terence Sutcliffe", "role": "Director", "appointed": "1995", "band": "60–65"}, {"name": "Derek Cattermole", "role": "Director", "appointed": "2005", "band": "55–60"}], "timeline": [{"year": "1995", "label": "Incorporated as a private limited company"}, {"year": "1995", "label": "Terence Sutcliffe appointed director"}, {"year": "2005", "label": "Derek Cattermole appointed director"}, {"year": "2020", "label": "Director resigned — Patricia Harrold"}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 17}, {"id": 17, "name": "Redcar Bulk Carriers Ltd", "crn": "ZZ021775", "sic": "49410", "sicLabel": "Freight transport by road", "region": "North East", "locality": "Redcar", "inc": 1996, "age": 30, "band": "55–60", "score": 61, "chips": ["SOLE CONTROL", "NO SUCCESSOR", "25+ YRS"], "signals": [{"label": "Director age band", "pts": 22, "max": 40, "note": "Eldest active director in the 55–60 band, as filed (month/year of birth only)."}, {"label": "Sole / family control", "pts": 20, "max": 20, "note": "One active director — the decision to sell belongs to one person."}, {"label": "No heir signal", "pts": 15, "max": 15, "note": "No director under 45 appointed since 2021."}, {"label": "Company age", "pts": 4, "max": 10, "note": "30 years trading since 1996 — full points."}, {"label": "Stability", "pts": 0, "max": 10, "note": "Filing irregularities in the last 24 months — partial deduction."}, {"label": "Recency events", "pts": 0, "max": 5, "note": "No auditor or address changes in the last 18 months."}], "directors": [{"name": "Geoffrey Ollerton", "role": "Director", "appointed": "1996", "band": "55–60"}], "timeline": [{"year": "1996", "label": "Incorporated as a private limited company"}, {"year": "1996", "label": "Geoffrey Ollerton appointed director"}, {"year": "2024", "label": "Accounts filed late (3 months)", "hot": true}, {"year": "2025", "label": "Micro-entity accounts filed"}, {"year": "2026", "label": "Confirmation statement filed"}], "rank": 18}], "regions": ["Scotland", "North East", "North West", "Yorkshire", "East Midlands", "West Midlands", "Wales", "East of England", "South East", "South West", "London"], "sics": [["49410", "Freight transport by road"], ["49420", "Removal services"], ["49200", "Freight rail transport"], ["50200", "Sea & coastal freight water transport"], ["51210", "Freight air transport"], ["52101", "Warehousing (refrigerated)"], ["52102", "Warehousing (non-refrigerated)"], ["52103", "Storage of goods"], ["52211", "Operation of rail freight terminals"], ["52241", "Cargo handling, water transport"], ["52243", "Cargo handling, land transport"], ["52290", "Freight forwarding & support"], ["53201", "Courier activities"], ["53202", "Postal & courier (other)"]], "theses": [{"id": "logistics", "label": "UK Logistics · 49xxx–53xxx", "meta": "50 targets · saved Jun 2026"}, {"id": "manufacturing", "label": "UK Manufacturing · 25xxx–28xxx", "meta": "50 targets · saved Jul 2026"}], "digest": [{"delta": "NEW", "hot": true, "name": "Ribble Warehousing Ltd", "reason": "entered the top 50 at rank 15 (director crossed into the 55–60 band)"}, {"delta": "NEW", "hot": true, "name": "Redcar Bulk Carriers Ltd", "reason": "entered the top 50 at rank 18"}, {"delta": "NEW", "hot": true, "name": "Tamar Valley Transport Ltd", "reason": "entered the top 50 at rank 14"}, {"delta": "+6", "hot": false, "name": "Fenland Freight Services Ltd", "reason": "eldest director turned 65 — age signal at maximum"}, {"delta": "+5", "hot": false, "name": "Stour Estuary Shipping Agents Ltd", "reason": "auditor changed — recency signal triggered"}, {"delta": "+5", "hot": false, "name": "Blackmore Vale Distribution Ltd", "reason": "registered office moved to an accountancy address"}, {"delta": "−10", "hot": null, "name": "Weald Cold Chain Ltd", "reason": "director aged 38 appointed — heir signal cleared"}], "changeLog": [{"date": "08 Jul 26", "name": "Fenland Freight", "change": "Director age band 60–65 → 65–70", "move": "86 → 92"}, {"date": "03 Jul 26", "name": "Stour Estuary", "change": "Auditor change filed", "move": "80 → 85"}, {"date": "28 Jun 26", "name": "Blackmore Vale", "change": "Registered address change", "move": "79 → 84"}, {"date": "19 Jun 26", "name": "Weald Cold Chain", "change": "Young director appointed", "move": "82 → 72"}, {"date": "11 Jun 26", "name": "Kelso Road Services", "change": "Confirmation statement filed", "move": "75 → 75"}, {"date": "02 Jun 26", "name": "Gwynedd Freight", "change": "Accounts filed late", "move": "90 → 85"}], "digestKicker": "July digest — preview", "digestTitle": "UK Logistics: 3 new entrants, 4 scores moved", "alertsCount": "7", "baseCount": 41208, "snapshotDate": "01 Jul 2026", "savedStamp": "Jul 2026"};
+var STAGES = ["Researching", "Contacted", "In dialogue", "Passed"];
+var EMPTY_LINES = [
+  "Nothing under research. Add targets from the pipeline.",
+  "No approaches yet — a letter beats an email for this generation of owner.",
+  "Nothing in dialogue yet. Move a contacted target forward when they reply.",
+  "Nothing passed. Long may it last."
+];
+
+var state = {
+  screen: "pipeline", selId: null,
+  minScore: 0, region: "all", sigFilters: [],
+  theses: APP.theses.slice(), activeThesis: APP.theses.length ? APP.theses[0].id : "",
+  shortlist: {}, notesOpenId: null,
+  digest: true, exported: false,
+  bName: "", bSicQuery: "", bSics: ["49410", "52102", "53201"],
+  bRegions: ["North West", "Yorkshire"], bMinAge: "20", bMinScore: "60",
+  bExcl: ["Insolvency history"], savedNote: ""
+};
+if (APP.demo) {
+  state.shortlist = {
+    0: { stage: 0, notes: "" },
+    3: { stage: 1, notes: "Spoke to broker 2 Jul — owner “thinking about it since Covid”." },
+    5: { stage: 0, notes: "" }
+  };
+}
+
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function byId(id) { return APP.companies.find(function (c) { return c.id === Number(id); }); }
+function muted(pct) { return "color-mix(in srgb,var(--color-text) " + pct + "%,transparent)"; }
+
+/* ---------- sidebar + header ---------- */
+
+function renderNav() {
+  var slCount = Object.keys(state.shortlist).length;
+  var defs = [
+    ["pipeline", "Pipeline", String(APP.companies.length)],
+    ["shortlist", "Shortlist", String(slCount)],
+    ["theses", "Theses", String(state.theses.length)],
+    ["alerts", "Alerts", APP.alertsCount],
+    ["settings", "Settings", ""]
+  ];
+  document.getElementById("nav").innerHTML = defs.map(function (d) {
+    var current = state.screen === d[0] || (d[0] === "pipeline" && state.screen === "detail");
+    return '<button class="navbtn" data-action="nav" data-arg="' + d[0] + '" aria-current="' +
+      current + '"><span>' + esc(d[1]) + '</span><span class="count">' + esc(d[2]) + '</span></button>';
+  }).join("");
+  document.getElementById("planBadge").textContent =
+    "Operator · " + state.theses.length + " theses";
+  var sel = document.getElementById("thesisSelect");
+  sel.innerHTML = state.theses.map(function (t) {
+    return '<option value="' + esc(t.id) + '">' + esc(t.label) + "</option>";
+  }).join("");
+  sel.value = state.activeThesis;
+}
+
+/* ---------- pipeline ---------- */
+
+var ALL_CHIPS = ["SOLE CONTROL", "FAMILY BOARD", "NO SUCCESSOR", "25+ YRS", "AUDITOR CHANGE"];
+
+function filteredCompanies() {
+  return APP.companies.filter(function (c) {
+    if (c.score < state.minScore) return false;
+    if (state.region !== "all" && c.region !== state.region) return false;
+    return state.sigFilters.every(function (f) { return c.chips.indexOf(f) >= 0; });
+  });
+}
+
+function pipelineHtml() {
+  var rows = filteredCompanies();
+  var segs = [0, 60, 70, 80].map(function (v) {
+    return '<button class="seg-opt" data-action="minscore" data-arg="' + v +
+      '" aria-pressed="' + (state.minScore === v) + '">' + (v === 0 ? "All" : v + "+") + "</button>";
+  }).join("");
+  var regions = ['<option value="all">All regions</option>'].concat(
+    APP.regions.map(function (r) {
+      return '<option value="' + esc(r) + '"' + (state.region === r ? " selected" : "") + ">" +
+        esc(r) + "</option>";
+    })).join("");
+  var chips = ALL_CHIPS.map(function (ch) {
+    return '<button class="tag chipbtn" data-action="sig" data-arg="' + esc(ch) +
+      '" aria-pressed="' + (state.sigFilters.indexOf(ch) >= 0) + '">' + esc(ch) + "</button>";
+  }).join("");
+
+  var head = '<div class="pgrid" style="padding:8px 10px;border-bottom:1px solid var(--color-divider)">' +
+    ["Score", "Company", "SIC", "Region", "Age", "Dir. band", "Signals"].map(function (h) {
+      return '<span class="colhead">' + h + "</span>";
+    }).join("") + "</div>";
+
+  var body = rows.map(function (c) {
+    var chipsHtml = c.chips.map(function (ch) {
+      return '<span class="tag tag-neutral" style="font-size:10px;white-space:nowrap">' +
+        esc(ch) + "</span>";
+    }).join("");
+    return '<div class="pgrid prow" role="button" tabindex="0" data-action="open" data-arg="' + c.id + '">' +
+      '<span style="display:flex;align-items:center;gap:10px">' +
+      '<span class="headfont mono" style="font-size:16px;width:26px">' + c.score + "</span>" +
+      '<span class="scorebar"><span style="width:' + c.score + '%"></span></span></span>' +
+      '<span class="headfont" style="font-size:15px;line-height:1.3">' + esc(c.name) + "</span>" +
+      '<span class="dim mono" style="font-size:13px">' + esc(c.sic) + "</span>" +
+      '<span class="dim" style="font-size:13px">' + esc(c.region) + "</span>" +
+      '<span class="dim mono" style="font-size:13px">' + c.age + " yr</span>" +
+      '<span class="dim mono" style="font-size:13px">' + esc(c.band) + "</span>" +
+      '<span style="display:flex;gap:6px;flex-wrap:wrap">' + chipsHtml + "</span></div>";
+  }).join("");
+
+  var empty = rows.length ? "" :
+    '<div style="padding:64px 10px;max-width:52ch">' +
+    '<p class="headfont" style="font-size:20px;margin:0">Nothing clears these filters.</p>' +
+    '<p style="font-size:14.5px;line-height:1.7;color:' + muted(65) + ';margin:8px 0 0">' +
+    "Lower the score threshold or widen the region — the register is deep, but a 90+ " +
+    "sole-control target in one county is a rare animal.</p></div>";
+
+  return '<section aria-label="Pipeline">' +
+    '<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:20px">' +
+    '<div><h1 style="font-size:30px;line-height:1.15;margin:0">Pipeline</h1>' +
+    '<p style="font-size:14.5px;color:' + muted(65) + ';margin:6px 0 0">' +
+    rows.length + " of " + APP.companies.length +
+    " scored targets shown · ranked by score · snapshot of " + esc(APP.snapshotDate) + "</p></div>" +
+    '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">' +
+    '<div class="seg">' + segs + "</div>" +
+    '<select class="input" data-action="region" style="font-size:13px;padding:6px 10px;width:auto">' +
+    regions + "</select></div></div>" +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">' + chips + "</div>" +
+    '<div style="overflow-x:auto"><div style="min-width:900px">' + head + body + "</div></div>" +
+    empty + "</section>";
+}
+
+/* ---------- company detail ---------- */
+
+function detailHtml() {
+  var c = byId(state.selId);
+  if (!c) return pipelineHtml();
+  var inSl = state.shortlist[c.id] != null;
+
+  var chips = c.chips.map(function (ch) {
+    return '<span class="tag tag-neutral" style="font-size:10px">' + esc(ch) + "</span>";
+  }).join("");
+
+  var sigs = c.signals.map(function (s) {
+    var pct = s.max ? Math.round(100 * s.pts / s.max) : 0;
+    return "<div>" +
+      '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:4px">' +
+      '<span style="font-size:13px;letter-spacing:0.04em;text-transform:uppercase;color:' + muted(72) + '">' +
+      esc(s.label) + "</span>" +
+      '<span class="headfont mono" style="font-size:14px">' + s.pts + " / " + s.max + "</span></div>" +
+      '<div style="height:10px;background:' + muted(7) + ';border-radius:var(--radius-sm);overflow:hidden">' +
+      '<div style="height:100%;width:' + pct + '%;background:var(--color-accent)"></div></div>' +
+      '<p style="font-size:13px;line-height:1.6;color:' + muted(60) + ';margin:5px 0 0">' +
+      esc(s.note) + "</p></div>";
+  }).join("");
+
+  var dirs = c.directors.map(function (d) {
+    return '<tr><td class="headfont" style="font-weight:600">' + esc(d.name) + "</td><td>" +
+      esc(d.role) + '</td><td class="mono">' + esc(d.appointed) + '</td><td class="mono">' +
+      esc(d.band) + "</td></tr>";
+  }).join("");
+
+  var tl = c.timeline.map(function (ev) {
+    var col = ev.hot ? "var(--color-accent-2-700)" : muted(60);
+    return '<div style="display:grid;grid-template-columns:52px 1fr;gap:14px;padding:9px 0;' +
+      'border-bottom:1px solid ' + muted(7) + '">' +
+      '<span class="headfont mono" style="font-size:14px;color:' + col + '">' + esc(ev.year) + "</span>" +
+      '<span style="font-size:14px;line-height:1.5">' + esc(ev.label) + "</span></div>";
+  }).join("");
+
+  return '<section aria-label="Company detail">' +
+    '<button class="btn btn-ghost" data-action="back" style="margin:0 0 14px -10px">← Pipeline</button>' +
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:8px">' +
+    '<div><h1 style="font-size:32px;line-height:1.12;margin:0">' + esc(c.name) + "</h1>" +
+    '<p class="mono" style="font-size:14px;color:' + muted(65) + ';margin:8px 0 0">' +
+    "CRN " + esc(c.crn) + " · SIC " + esc(c.sic) + " — " + esc(c.sicLabel) +
+    " · Incorporated " + c.inc + " (" + c.age + " yrs) · " + esc(c.locality) + ", " +
+    esc(c.region) + "</p></div>" +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+    '<button class="btn btn-primary" data-action="shortlist-add" data-arg="' + c.id + '"' +
+    (inSl ? " disabled" : "") + ">" + (inSl ? "On shortlist ✓" : "Add to shortlist") + "</button>" +
+    '<button class="btn btn-secondary" data-action="export" id="exportBtn">' +
+    (state.exported ? "Queued — check email" : "Export PDF") + "</button></div></div>" +
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 34px">' + chips + "</div>" +
+    '<div style="display:grid;grid-template-columns:minmax(340px,7fr) minmax(300px,5fr);gap:44px clamp(32px,4vw,72px);align-items:start">' +
+    '<div><h2 class="kicker" style="margin:0 0 4px">Score breakdown</h2>' +
+    '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:18px">' +
+    '<span class="headfont mono" style="font-size:52px;line-height:1">' + c.score + "</span>" +
+    '<span style="font-size:14px;color:' + muted(60) + '">of 100 · rank ' + c.rank +
+    " in thesis</span></div>" +
+    '<div style="display:flex;flex-direction:column;gap:13px">' + sigs + "</div>" +
+    '<h2 class="kicker" style="margin:40px 0 12px">Directors — age bands as filed</h2>' +
+    '<table class="table"><thead><tr><th>Name</th><th>Role</th><th>Appointed</th>' +
+    "<th>Age band</th></tr></thead><tbody>" + dirs + "</tbody></table></div>" +
+    '<div><h2 class="kicker" style="margin:0 0 16px">Registry timeline</h2>' +
+    '<div style="display:flex;flex-direction:column">' + tl + "</div></div></div>" +
+    '<p style="font-size:13px;line-height:1.7;color:' + muted(58) + ';max-width:66ch;margin:44px 0 0">' +
+    "Score = statistical similarity to pre-succession profiles, not intent. All fields above " +
+    "derive from Companies House filings; director ages are shown only as five-year bands, " +
+    "exactly as the register provides them.</p></section>";
+}
+
+/* ---------- thesis builder ---------- */
+
+function previewCount() {
+  var base = APP.baseCount * (state.bSics.length / APP.sics.length) *
+    (state.bRegions.length ? state.bRegions.length / APP.regions.length : 1);
+  var ageF = { "10": 1, "15": 0.72, "20": 0.48, "25": 0.29 }[state.bMinAge];
+  var scF = { "50": 0.31, "60": 0.14, "70": 0.052, "80": 0.013 }[state.bMinScore];
+  return Math.max(12, Math.round(base * ageF * scF * (1 - 0.06 * state.bExcl.length)));
+}
+
+function sicRowsHtml() {
+  var q = state.bSicQuery.trim().toLowerCase();
+  return APP.sics.filter(function (s) {
+    return !q || s[0].indexOf(q) === 0 || s[1].toLowerCase().indexOf(q) >= 0;
+  }).slice(0, 7).map(function (s) {
+    var on = state.bSics.indexOf(s[0]) >= 0;
+    return '<button class="sicrow" data-action="bsic-toggle" data-arg="' + esc(s[0]) +
+      '" aria-pressed="' + on + '">' +
+      '<span class="mono" style="color:' + muted(65) + '">' + esc(s[0]) + "</span>" +
+      "<span>" + esc(s[1]) + "</span>" +
+      '<span class="headfont" style="font-weight:600;font-size:13px;color:var(--color-accent-700)">' +
+      (on ? "included" : "") + "</span></button>";
+  }).join("");
+}
+
+function previewNoteText() {
+  return "Active private companies matching " + state.bSics.length + " SIC codes across " +
+    (state.bRegions.length || APP.regions.length) + " regions, ≥" + state.bMinAge +
+    " years old, scoring ≥" + state.bMinScore + ". The top 50 make the report.";
+}
+
+function updateBuilderPreview() {
+  var el = document.getElementById("sicRows");
+  if (!el) return;
+  el.innerHTML = sicRowsHtml();
+  document.getElementById("previewCount").textContent = previewCount().toLocaleString("en-GB");
+  document.getElementById("previewNote").textContent = previewNoteText();
+  document.getElementById("saveNote").textContent = state.savedNote;
+}
+
+function thesesHtml() {
+  var regionChips = APP.regions.map(function (r) {
+    return '<button class="tag chipbtn" data-action="bregion" data-arg="' + esc(r) +
+      '" aria-pressed="' + (state.bRegions.indexOf(r) >= 0) + '">' + esc(r) + "</button>";
+  }).join("");
+  var exclChips = ["Insolvency history", "PLC parent", "Dormant accounts", "Charity / CIC"]
+    .map(function (x) {
+      return '<button class="tag chipbtn" data-action="bexcl" data-arg="' + esc(x) +
+        '" aria-pressed="' + (state.bExcl.indexOf(x) >= 0) + '">' + esc(x) + "</button>";
+    }).join("");
+  var ages = ["10", "15", "20", "25"].map(function (v) {
+    return '<option value="' + v + '"' + (state.bMinAge === v ? " selected" : "") + ">" +
+      v + " years</option>";
+  }).join("");
+  var scores = ["50", "60", "70", "80"].map(function (v) {
+    return '<option value="' + v + '"' + (state.bMinScore === v ? " selected" : "") + ">" +
+      v + "</option>";
+  }).join("");
+  var saved = state.theses.map(function (t) {
+    return '<div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline;' +
+      'padding:9px 0;border-bottom:1px solid ' + muted(7) + '">' +
+      '<span class="headfont" style="font-weight:600;font-size:14.5px">' + esc(t.label) + "</span>" +
+      '<span class="mono" style="font-size:12.5px;color:' + muted(60) + '">' + esc(t.meta) +
+      "</span></div>";
+  }).join("");
+
+  return '<section aria-label="Thesis builder">' +
+    '<h1 style="font-size:30px;line-height:1.15;margin:0 0 6px">Thesis builder</h1>' +
+    '<p style="font-size:14.5px;color:' + muted(65) + ';margin:0 0 30px;max-width:58ch">' +
+    "Define an industry thesis; the pipeline re-ranks the register against it overnight.</p>" +
+    '<div style="display:grid;grid-template-columns:minmax(360px,7fr) minmax(260px,4fr);gap:36px clamp(32px,4vw,72px);align-items:start">' +
+    '<div style="display:flex;flex-direction:column;gap:26px">' +
+    '<div class="field"><label style="letter-spacing:0.06em;text-transform:uppercase">Thesis name</label>' +
+    '<input class="input" data-action="bname" value="' + esc(state.bName) +
+    '" placeholder="e.g. UK Precision Manufacturing" style="max-width:420px"></div>' +
+    '<div><label style="display:block;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;color:' + muted(70) + '">Industry — SIC codes</label>' +
+    '<input class="input" data-action="bsic-query" value="' + esc(state.bSicQuery) +
+    '" placeholder="Search SIC codes… ‘freight’, ‘warehous’, 49" style="max-width:420px;margin-bottom:10px">' +
+    '<div id="sicRows" style="display:flex;flex-direction:column;gap:2px;max-width:520px">' +
+    sicRowsHtml() + "</div></div>" +
+    '<div><label style="display:block;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;color:' + muted(70) + '">Regions</label>' +
+    '<div style="display:flex;gap:7px;flex-wrap:wrap;max-width:560px">' + regionChips + "</div></div>" +
+    '<div style="display:flex;gap:26px;flex-wrap:wrap">' +
+    '<div class="field"><label style="letter-spacing:0.06em;text-transform:uppercase">Min company age</label>' +
+    '<select class="input" data-action="bminage" style="min-width:130px;width:auto">' + ages + "</select></div>" +
+    '<div class="field"><label style="letter-spacing:0.06em;text-transform:uppercase">Min score</label>' +
+    '<select class="input" data-action="bminscore" style="min-width:130px;width:auto">' + scores + "</select></div></div>" +
+    '<div><label style="display:block;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;color:' + muted(70) + '">Exclusions</label>' +
+    '<div style="display:flex;gap:7px;flex-wrap:wrap">' + exclChips + "</div></div>" +
+    '<div style="display:flex;gap:12px;align-items:center">' +
+    '<button class="btn btn-primary" data-action="bsave">Save thesis</button>' +
+    '<span id="saveNote" style="font-size:13px;color:var(--color-accent-700)">' +
+    esc(state.savedNote) + "</span></div></div>" +
+    '<div><h2 class="kicker" style="margin:0 0 10px">Live preview</h2>' +
+    '<div style="display:flex;align-items:baseline;gap:10px">' +
+    '<span class="headfont mono" id="previewCount" style="font-size:46px;line-height:1;color:var(--color-accent-700)">' +
+    previewCount().toLocaleString("en-GB") + "</span>" +
+    '<span style="font-size:14px;color:' + muted(60) + '">companies match</span></div>' +
+    '<p id="previewNote" style="font-size:13.5px;line-height:1.7;color:' + muted(65) +
+    ';margin:14px 0 0;max-width:36ch">' + esc(previewNoteText()) + "</p>" +
+    '<h2 class="kicker" style="margin:36px 0 6px">Saved theses</h2>' +
+    '<div style="display:flex;flex-direction:column">' + saved + "</div></div></div></section>";
+}
+
+/* ---------- shortlist ---------- */
+
+function shortlistHtml() {
+  var slCount = Object.keys(state.shortlist).length;
+  var summary = slCount === 0
+    ? "Nothing saved yet. Open a company in the pipeline and press “Add to shortlist” — it lands in Researching."
+    : slCount + " saved target" + (slCount === 1 ? "" : "s") +
+      " across four stages. Click a card for notes; arrows move it along.";
+
+  var cols = STAGES.map(function (label, si) {
+    var cards = Object.keys(state.shortlist).filter(function (id) {
+      return state.shortlist[id].stage === si;
+    }).map(function (id) {
+      var v = state.shortlist[id];
+      var c = byId(id);
+      var notesOpen = state.notesOpenId === c.id;
+      var notes = notesOpen
+        ? '<textarea class="input" data-action="notes" data-arg="' + c.id +
+          '" placeholder="Notes — who to call, what the accounts say…" rows="3" ' +
+          'style="font-size:13px;resize:vertical">' + esc(v.notes) + "</textarea>"
+        : "";
+      return '<div class="card elev-sm">' +
+        '<div data-action="notes-toggle" data-arg="' + c.id + '" style="cursor:pointer">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">' +
+        '<span class="headfont mono" style="font-size:14px">' + c.score + "</span>" +
+        '<span class="scorebar" style="height:6px"><span style="width:' + c.score + '%"></span></span></div>' +
+        '<div class="headfont" style="font-weight:600;font-size:14.5px;line-height:1.3">' +
+        esc(c.name) + "</div>" +
+        '<div style="margin-top:7px"><span class="tag tag-neutral" style="font-size:10px">' +
+        esc(c.chips[0] || c.region) + "</span></div></div>" + notes +
+        '<div style="display:flex;justify-content:space-between;gap:6px">' +
+        '<button class="btn btn-ghost" data-action="move" data-arg="' + c.id + ',-1"' +
+        (si === 0 ? " disabled" : "") + ' style="font-size:12px;padding:2px 6px">←</button>' +
+        '<button class="btn btn-ghost" data-action="open" data-arg="' + c.id +
+        '" style="font-size:12px;padding:2px 6px">Open</button>' +
+        '<button class="btn btn-ghost" data-action="move" data-arg="' + c.id + ',1"' +
+        (si === 3 ? " disabled" : "") + ' style="font-size:12px;padding:2px 6px">→</button>' +
+        "</div></div>";
+    });
+    var empty = cards.length ? "" :
+      '<p style="font-size:13px;line-height:1.6;color:' + muted(50) +
+      ';margin:4px 0 0;font-style:italic;font-family:var(--font-heading)">' +
+      esc(EMPTY_LINES[si]) + "</p>";
+    return "<div>" +
+      '<div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2px solid var(--color-text);margin-bottom:12px">' +
+      '<span class="headfont" style="font-size:15px">' + esc(label) + "</span>" +
+      '<span class="mono" style="font-size:12px;color:' + muted(55) + '">' + cards.length +
+      "</span></div>" +
+      '<div style="display:flex;flex-direction:column;gap:10px">' + cards.join("") + empty +
+      "</div></div>";
+  }).join("");
+
+  return '<section aria-label="Shortlist">' +
+    '<h1 style="font-size:30px;line-height:1.15;margin:0 0 6px">Shortlist</h1>' +
+    '<p style="font-size:14.5px;color:' + muted(65) + ';margin:0 0 28px;max-width:60ch">' +
+    esc(summary) + "</p>" +
+    '<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:repeat(4,minmax(200px,1fr));gap:clamp(16px,2vw,32px);align-items:start;min-width:860px">' +
+    cols + "</div></div></section>";
+}
+
+/* ---------- alerts ---------- */
+
+function alertsHtml() {
+  var items = APP.digest.map(function (d) {
+    var col = d.hot === true ? "var(--color-accent-2-700)"
+      : d.hot === false ? "var(--color-accent-700)" : muted(55);
+    return '<div style="display:grid;grid-template-columns:58px 1fr;gap:14px;align-items:baseline;' +
+      'padding:10px 0;border-bottom:1px solid ' + muted(7) + '">' +
+      '<span class="headfont mono" style="font-size:15px;color:' + col + '">' + esc(d.delta) + "</span>" +
+      '<span style="font-size:14px;line-height:1.5"><span class="headfont" style="font-weight:600">' +
+      esc(d.name) + "</span> — " + esc(d.reason) + "</span></div>";
+  }).join("");
+  var rows = APP.changeLog.map(function (c) {
+    return '<tr><td class="mono" style="white-space:nowrap">' + esc(c.date) +
+      '</td><td class="headfont" style="font-weight:600">' + esc(c.name) + "</td><td>" +
+      esc(c.change) + '</td><td class="mono" style="text-align:right;white-space:nowrap">' +
+      esc(c.move) + "</td></tr>";
+  }).join("");
+  var track = state.digest ? "var(--color-accent)" : muted(25);
+  var knob = state.digest ? "18px" : "2px";
+  var emptyNote = APP.digest.length ? "" :
+    '<p style="font-size:14px;color:' + muted(60) + '">Digest data needs filing-history ' +
+    "tracking — available once monthly snapshots accumulate.</p>";
+
+  return '<section aria-label="Alerts and digest">' +
+    '<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:26px">' +
+    '<div><h1 style="font-size:30px;line-height:1.15;margin:0 0 6px">Alerts &amp; digest</h1>' +
+    '<p style="font-size:14.5px;color:' + muted(65) + ';margin:0">The register moves every day. ' +
+    "Once a month, we tell you exactly how.</p></div>" +
+    '<button data-action="digest" style="display:flex;align-items:center;gap:10px;font-family:var(--font-body);font-size:14px;background:none;border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:8px 14px;cursor:pointer;color:inherit">' +
+    '<span style="width:34px;height:18px;border-radius:9px;position:relative;background:' + track +
+    ';transition:background 0.15s"><span style="position:absolute;top:2px;left:' + knob +
+    ';width:14px;height:14px;border-radius:50%;background:var(--color-bg);box-shadow:var(--shadow-sm);transition:left 0.15s"></span></span>' +
+    "<span>" + (state.digest ? "Monthly email digest: on" : "Monthly email digest: off") +
+    "</span></button></div>" +
+    '<div style="display:grid;grid-template-columns:minmax(320px,6fr) minmax(320px,6fr);gap:40px clamp(32px,4vw,72px);align-items:start">' +
+    '<div><h2 class="kicker" style="margin:0 0 4px">' + esc(APP.digestKicker) + "</h2>" +
+    '<p class="headfont" style="font-size:21px;margin:0 0 16px">' + esc(APP.digestTitle) + "</p>" +
+    '<div style="display:flex;flex-direction:column">' + items + "</div>" + emptyNote + "</div>" +
+    '<div><h2 class="kicker" style="margin:0 0 12px">Change log</h2>' +
+    '<table class="table"><thead><tr><th>Date</th><th>Company</th><th>Change</th>' +
+    '<th style="text-align:right">Score</th></tr></thead><tbody>' + rows +
+    "</tbody></table></div></div></section>";
+}
+
+/* ---------- settings ---------- */
+
+function settingsHtml() {
+  return '<section aria-label="Settings">' +
+    '<h1 style="font-size:30px;line-height:1.15;margin:0 0 26px">Settings</h1>' +
+    '<div style="display:flex;flex-direction:column;gap:26px;max-width:560px">' +
+    '<div><h2 class="kicker" style="margin:0 0 8px">Plan</h2>' +
+    '<p style="font-size:15px;line-height:1.7;margin:0"><span class="headfont" style="font-weight:600">Operator</span>' +
+    " — 3 theses, monthly digest, PDF export. Upgrade to Syndicate for 10 theses and CSV API.</p></div>" +
+    '<div><h2 class="kicker" style="margin:0 0 8px">Data sources</h2>' +
+    '<p style="font-size:15px;line-height:1.7;margin:0;color:' + muted(78) + '">' +
+    "Companies House bulk snapshot (refreshed monthly) and the Officers API (continuous). " +
+    "No scraped data, no private enrichment, no email-finding — official public registers only.</p></div>" +
+    '<div><h2 class="kicker" style="margin:0 0 8px">Compliance</h2>' +
+    '<p style="font-size:15px;line-height:1.7;margin:0;color:' + muted(78) + '">' +
+    "Lawful basis: legitimate interest over public register data. Director ages stored as " +
+    "month and year only, displayed as five-year bands. Removal requests: removals@successionscope.example " +
+    "— actioned within 5 working days.</p></div></div></section>";
+}
+
+/* ---------- render + events ---------- */
+
+function render() {
+  renderNav();
+  var html;
+  if (state.screen === "detail") html = detailHtml();
+  else if (state.screen === "theses") html = thesesHtml();
+  else if (state.screen === "shortlist") html = shortlistHtml();
+  else if (state.screen === "alerts") html = alertsHtml();
+  else if (state.screen === "settings") html = settingsHtml();
+  else html = pipelineHtml();
+  document.getElementById("screen").innerHTML = html;
+}
+
+document.addEventListener("click", function (e) {
+  var el = e.target.closest("[data-action]");
+  if (!el) return;
+  var action = el.getAttribute("data-action");
+  var arg = el.getAttribute("data-arg");
+  if (action === "nav") { state.screen = arg; render(); }
+  else if (action === "minscore") { state.minScore = Number(arg); render(); }
+  else if (action === "sig") {
+    var i = state.sigFilters.indexOf(arg);
+    if (i >= 0) state.sigFilters.splice(i, 1); else state.sigFilters.push(arg);
+    render();
+  }
+  else if (action === "open") { state.screen = "detail"; state.selId = Number(arg); render(); }
+  else if (action === "back") { state.screen = "pipeline"; render(); }
+  else if (action === "shortlist-add") {
+    if (!state.shortlist[arg]) state.shortlist[arg] = { stage: 0, notes: "" };
+    render();
+  }
+  else if (action === "export") {
+    state.exported = true;
+    el.textContent = "Queued — check email";
+    setTimeout(function () {
+      state.exported = false;
+      var btn = document.getElementById("exportBtn");
+      if (btn) btn.textContent = "Export PDF";
+    }, 2500);
+  }
+  else if (action === "bsic-toggle") {
+    var j = state.bSics.indexOf(arg);
+    if (j >= 0) state.bSics.splice(j, 1); else state.bSics.push(arg);
+    updateBuilderPreview();
+    el.setAttribute("aria-pressed", String(j < 0));
+  }
+  else if (action === "bregion") {
+    var k = state.bRegions.indexOf(arg);
+    if (k >= 0) state.bRegions.splice(k, 1); else state.bRegions.push(arg);
+    el.setAttribute("aria-pressed", String(k < 0));
+    updateBuilderPreview();
+  }
+  else if (action === "bexcl") {
+    var m = state.bExcl.indexOf(arg);
+    if (m >= 0) state.bExcl.splice(m, 1); else state.bExcl.push(arg);
+    el.setAttribute("aria-pressed", String(m < 0));
+    updateBuilderPreview();
+  }
+  else if (action === "bsave") {
+    var name = state.bName.trim() || "Untitled thesis";
+    var id = "t" + state.theses.length + "_" + name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    state.theses.push({ id: id, label: name,
+      meta: previewCount().toLocaleString("en-GB") + " match · saved " + APP.savedStamp });
+    state.activeThesis = id;
+    state.savedNote = "“" + name + "” saved — now the active thesis.";
+    state.bName = "";
+    render();
+    setTimeout(function () { state.savedNote = ""; var n = document.getElementById("saveNote");
+      if (n) n.textContent = ""; }, 3000);
+  }
+  else if (action === "notes-toggle") {
+    var cid = Number(arg);
+    state.notesOpenId = state.notesOpenId === cid ? null : cid;
+    render();
+  }
+  else if (action === "move") {
+    var parts = arg.split(",");
+    var entry = state.shortlist[parts[0]];
+    if (entry) {
+      entry.stage = Math.max(0, Math.min(3, entry.stage + Number(parts[1])));
+      render();
+    }
+  }
+  else if (action === "digest") { state.digest = !state.digest; render(); }
+});
+
+document.addEventListener("input", function (e) {
+  var el = e.target.closest("[data-action]");
+  if (!el) return;
+  var action = el.getAttribute("data-action");
+  if (action === "bname") { state.bName = el.value; }
+  else if (action === "bsic-query") { state.bSicQuery = el.value; updateBuilderPreview(); }
+  else if (action === "notes") {
+    var entry = state.shortlist[el.getAttribute("data-arg")];
+    if (entry) entry.notes = el.value;
+  }
+});
+
+document.addEventListener("change", function (e) {
+  var el = e.target.closest("[data-action]");
+  if (!el) return;
+  var action = el.getAttribute("data-action");
+  if (action === "thesis") { state.activeThesis = el.value; }
+  else if (action === "region") { state.region = el.value; render(); }
+  else if (action === "bminage") { state.bMinAge = el.value; updateBuilderPreview(); }
+  else if (action === "bminscore") { state.bMinScore = el.value; updateBuilderPreview(); }
+});
+
+render();
+</script>
+</body>
+</html>
