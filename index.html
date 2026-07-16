@@ -192,14 +192,14 @@ footer.foot { margin-top: clamp(56px, 7vw, 88px); border-top: 2px solid var(--in
       <aside class="teaser" aria-label="Sample ranked targets">
         <span class="kicker">From the sample &mdash; synthetic data</span>
         <div class="trow">
-          <div class="trow-head"><span class="trow-name">Marwick Freight Services Ltd</span><span class="trow-score num">75.2<span style="color:var(--muted-55);font-weight:400;font-size:12px"> priority</span></span></div>
-          <div class="tbar"><span style="width:75%"></span></div>
-          <div class="trow-meta num">Owner (PSC) band 70+ &middot; sole control &middot; board thinning &middot; confidence 85</div>
+          <div class="trow-head"><span class="trow-name">Marwick Freight Services Ltd</span><span class="trow-score num">88.5<span style="color:var(--muted-55);font-weight:400;font-size:12px"> priority</span></span></div>
+          <div class="tbar"><span style="width:88%"></span></div>
+          <div class="trow-meta num">Owner (PSC) &middot; sole control &middot; board thinning &middot; ~43 staff &middot; confidence 100</div>
         </div>
         <div class="trow">
-          <div class="trow-head"><span class="trow-name">Elmsworth Logistics Group Ltd</span><span class="trow-score num">73.1<span style="color:var(--muted-55);font-weight:400;font-size:12px"> priority</span></span></div>
-          <div class="tbar"><span style="width:73%"></span></div>
-          <div class="trow-meta num">Family control &middot; office moved inside 18 months &middot; simplicity 100</div>
+          <div class="trow-head"><span class="trow-name">Elmsworth Logistics Group Ltd</span><span class="trow-score num">86.0<span style="color:var(--muted-55);font-weight:400;font-size:12px"> priority</span></span></div>
+          <div class="tbar"><span style="width:86%"></span></div>
+          <div class="trow-meta num">Family control &middot; net assets &pound;1&ndash;5M &middot; attractiveness 59 &middot; simplicity 100</div>
         </div>
         <div class="trow" style="border-bottom:0">
           <div class="trow-head"><span class="trow-name">Quarrington Transport Ltd</span><span class="trow-score num" style="color:var(--hot)">gated out</span></div>
@@ -217,7 +217,7 @@ footer.foot { margin-top: clamp(56px, 7vw, 88px); border-top: 2px solid var(--in
       <div class="strip-grid num">
         <div class="stat"><b>5.7M</b><span>companies read from the official register, every month</span></div>
         <div class="stat"><b>13,670</b><span>active UK logistics SMEs pass the thesis filters</span></div>
-        <div class="stat"><b>9,673</b><span>pass the qualification gate &mdash; the top 50 by priority make your report</span></div>
+        <div class="stat"><b>9,092</b><span>pass the qualification gate &mdash; the top 50 by priority make your report</span></div>
         <div class="stat"><b>0</b><span>scraped or private data sources &mdash; public registers only</span></div>
       </div>
     </div>
@@ -229,10 +229,10 @@ footer.foot { margin-top: clamp(56px, 7vw, 88px); border-top: 2px solid var(--in
         <span class="kicker">The model</span>
         <h2>A gate, then a ranking. Every number explained.</h2>
         <p>First a qualification gate with few, true disqualifiers &mdash; strike-off markers,
-          corporate-group ownership, no live board. Then survivors are ranked by priority:
-          succession exposure &times; data confidence, dampened (never deleted) by transaction
-          complexity. The breakdown is the product &mdash; it survives contact with an
-          investment committee.</p>
+          corporate-group ownership, dormant accounts, no live board. Then survivors are
+          ranked by priority: succession exposure &times; data confidence &times; buyer fit,
+          dampened (never deleted) by transaction complexity. The breakdown is the product
+          &mdash; it survives contact with an investment committee.</p>
       </div>
       <div class="signals">
         <div class="sig">
@@ -268,6 +268,14 @@ footer.foot { margin-top: clamp(56px, 7vw, 88px); border-top: 2px solid var(--in
             so this signal is deliberately modest.</p>
         </div>
         <div class="sig">
+          <div class="sig-head"><span class="sig-name">Business attractiveness</span><span class="sig-pts num">0&ndash;100</span></div>
+          <div class="sig-bar"><span style="width:100%"></span></div>
+          <p>A balance-sheet bundle from the filed iXBRL accounts &mdash; net-asset level and
+            three-year trend, cash against creditors, headcount, asset base, filing hygiene.
+            UK small-company filings carry no turnover or profit, and none is ever estimated:
+            where accounts are missing, attractiveness is reported as unknown, not invented.</p>
+        </div>
+        <div class="sig">
           <div class="sig-head"><span class="sig-name">Transaction simplicity</span><span class="sig-pts num">0&ndash;100</span></div>
           <div class="sig-bar"><span style="width:100%"></span></div>
           <p>Starts at a hundred; ownership layers, crowded cap tables and charge churn subtract.
@@ -276,10 +284,11 @@ footer.foot { margin-top: clamp(56px, 7vw, 88px); border-top: 2px solid var(--in
         </div>
         <div class="sig">
           <div class="sig-head"><span class="sig-name">Data confidence</span><span class="sig-pts num">0&ndash;100</span></div>
-          <div class="sig-bar"><span style="width:85%"></span></div>
-          <p>How much the register actually told us &mdash; owner age, ownership, filings, charges.
-            Accounts are not yet ingested, so confidence tops out at 85 by construction: unknowns
-            lower the number, they are never guessed.</p>
+          <div class="sig-bar"><span style="width:100%"></span></div>
+          <p>How much the register actually told us &mdash; owner age, ownership, filing history,
+            charges, filed accounts. All four data axes are ingested; where any is missing the
+            number drops instead of being guessed. Every company here also passed the
+            qualification gate.</p>
         </div>
       </div>
     </section>
@@ -300,7 +309,8 @@ footer.foot { margin-top: clamp(56px, 7vw, 88px); border-top: 2px solid var(--in
           <span class="kicker num">Step 2</span>
           <h3>We gate and rank the register</h3>
           <p>Every active private company in your thesis is filtered from 5.7M register rows,
-            enriched with officers, PSC ownership, filing events and charges, passed through the
+            enriched with officers, PSC ownership, filing events, charges and filed iXBRL
+            accounts, passed through the
             qualification gate and ranked by succession priority.</p>
         </div>
         <div class="step">
